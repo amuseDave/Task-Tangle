@@ -5,8 +5,12 @@
 }
 html {
   font-size: 62.5%;
+  overflow: hidden;
 }
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: url("./default.png"), default;
   background-color: rgb(184, 184, 184);
   background-image: url("./bg.png");
@@ -16,4 +20,45 @@ body {
   background-position: center;
   background-color: rgb(20, 80, 87);
   min-height: 100dvh;
+}
+img {
+  object-fit: cover;
+  object-position: center;
+  height: auto;
+  max-width: 100%;
+}
+.cloud-images {
+  background-size: cover;
+  height: 100%;
+  position: relative;
+}
+
+.cloud-images img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.cloud-2 {
+  animation: moveCloud 30s linear infinite;
+}
+.cloud-3 {
+  animation: moveCloud 45s 1s linear infinite;
+}
+
+@keyframes moveCloud {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+#canvas {
+  background-color: white;
+  width: 300px;
+  height: 300px;
 }
