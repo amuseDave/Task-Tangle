@@ -6,13 +6,16 @@
     <title>Task & Tangle</title>
   </head>
   <body>
-    <div class="cloud-images">
+    <div class="game-bg">
+      <canvas id="canvas"></canvas>
+      <img src="./bg.png" class="bg-game" />
+
       <img draggable="false" src="./clouds_1.png" alt="" class="cloud-1" />
       <img draggable="false" src="./clouds_2.png" alt="" class="cloud-2" />
       <img draggable="false" src="./clouds_3.png" alt="" class="cloud-3" />
       <img draggable="false" src="./clouds_4.png" alt="" class="cloud-4" />
     </div>
-    <canvas id="canvas" height="300" width="300"></canvas>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

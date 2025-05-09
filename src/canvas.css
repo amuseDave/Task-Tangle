@@ -1,0 +1,54 @@
+:root {
+  --aspect-ratio: 1920 / 917;
+}
+
+.cloud-2 {
+  animation: moveCloudInitial 45s linear 1 forwards, moveCloud 55s 45s linear infinite;
+}
+.cloud-3 {
+  animation: moveCloudInitial 30s linear 1 forwards, moveCloud 40s 30s linear infinite;
+}
+
+@keyframes moveCloud {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes moveCloudInitial {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+#canvas,
+.game-bg {
+  position: relative;
+  aspect-ratio: var(--aspect-ratio);
+  width: 100%;
+  overflow: hidden;
+}
+#canvas {
+  z-index: 1;
+}
+.game-bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+
+@media (max-width: 100em) {
+  #canvas,
+  .game-bg {
+    width: 1600px;
+  }
+}
