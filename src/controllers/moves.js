@@ -1,3 +1,0 @@
-const movements = {
-  walk() {},
-};
