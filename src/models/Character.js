@@ -58,6 +58,8 @@ export class Character {
     } else if (isJumping || isJump) {
       if (!isJumping) {
         this.state.isJumping = true;
+
+        // # To handle spriteSheet separate for jump
         this.spriteState.isJumping = true;
       }
 
