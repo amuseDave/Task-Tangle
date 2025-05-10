@@ -28,6 +28,8 @@ export class Character {
       name: "",
 
       isJumping: false,
+      isAttacking: false,
+      isRunningAttacking: false,
     };
 
     this.characterPosX = 800;
@@ -48,12 +50,14 @@ export class Character {
       direction,
 
       isAttacking,
-      isAttack,
     } = this.state;
 
-    if (isWalking) {
-      const curSpeed = isRunning ? this.stats.runSpeed : this.stats.moveSpeed;
-      this.characterPosX += direction === "left" ? -curSpeed : curSpeed;
+    if (isRunning) {
+      const { runSpeed } = this.stats;
+      this.characterPosX += direction === "left" ? -runSpeed : runSpeed;
+    } else if (isWalking) {
+      const { walkSpeed } = this.stats;
+      this.characterPosX += direction === "left" ? -walkSpeed : walkSpeed;
     }
 
     if (isFalling) {
@@ -89,8 +93,9 @@ export class Character {
     }
 
     if (isAttacking) {
-      if (!this.spriteState.isAttacking) {
-        this.spriteState.isAttacking = true;
+      if (!this.spriteState.isAttacking && !this.spriteState.isRunningAttacking) {
+        if (this.state.isRunning) this.spriteState.isRunningAttacking = true;
+        else this.spriteState.isAttacking = true;
         this.setSpriteCount();
       }
     }
@@ -101,10 +106,11 @@ export class Character {
     if (this.state.isDamaged) return "damage";
     // Animations independent from the active changing state
     // It needs to forwards only once
+    if (this.spriteState.isRunningAttacking) return "runAttack";
     if (this.spriteState.isAttacking) return "attack";
     if (this.spriteState.isJumping) return "jump";
     //
-    if (this.state.isRunning && this.state.isWalking) return "run";
+    if (this.state.isRunning) return "run";
     if (this.state.isWalking) return "walk";
     return "idle";
   }
@@ -126,6 +132,8 @@ export class Character {
         if (this.spriteState.isAttacking) this.spriteState.isAttacking = false;
       } else if (this.spriteState.currentSprite >= this.spriteState.spriteCount - 1) {
         this.max = true;
+        if (this.spriteState.isRunningAttacking)
+          this.spriteState.isRunningAttacking = false;
         if (this.spriteState.isJumping) this.spriteState.isJumping = false;
       }
     }

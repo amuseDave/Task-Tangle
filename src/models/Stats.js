@@ -1,6 +1,6 @@
 export class Stats {
   constructor(
-    moveSpeed,
+    walkSpeed,
     runSpeed,
     jumpSpeedInitial,
     jumpSpeedStep,
@@ -8,7 +8,7 @@ export class Stats {
     fallSpeedLimit,
     healthPoints
   ) {
-    this.moveSpeed = moveSpeed;
+    this.walkSpeed = walkSpeed;
     this.runSpeed = runSpeed;
 
     this.jumpSpeedInitial = jumpSpeedInitial;

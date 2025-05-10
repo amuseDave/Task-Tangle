@@ -24,10 +24,12 @@ class PlayerController {
     if (key === "d" || key === "a") {
       this.character.state.isWalking = true;
       this.character.state.direction = key === "d" ? "right" : "left";
+
+      if (this.state.shiftPressed) this.character.state.isRunning = true;
     } else if (key === "w" || key === " ") {
       this.character.state.isJump = true;
     } else if (key === "shift") {
-      this.character.state.isRunning = true;
+      if (this.character.state.isWalking) this.character.state.isRunning = true;
     }
   }
 
@@ -43,6 +45,7 @@ class PlayerController {
         this.character.state.direction = key === "d" ? "left" : "right";
       } else {
         this.character.state.isWalking = false;
+        this.character.state.isRunning = false;
       }
     } else if (key === " " || key === "w") {
       if (!this.state[" Pressed"] && !this.state.wPressed) {
