@@ -14,17 +14,18 @@ export class Character {
       isJumping: false,
       isJump: false,
       isFalling: false,
-      isAttacking: false,
 
+      isAttacking: false,
       isDamaged: false,
 
       direction: "right",
     };
 
     this.spriteState = {
+      spriteCount: null,
       currentSprite: 0,
       max: false,
-      name: "idle",
+      name: "",
 
       isJumping: false,
     };
@@ -36,8 +37,19 @@ export class Character {
   }
 
   setState() {
-    const { isRunning, isWalking, isJumping, isJump, isFalling, direction, isAttacking } =
-      this.state;
+    const {
+      isRunning,
+      isWalking,
+
+      isJumping,
+      isJump,
+      isFalling,
+
+      direction,
+
+      isAttacking,
+      isAttack,
+    } = this.state;
 
     if (isWalking) {
       const curSpeed = isRunning ? this.stats.runSpeed : this.stats.moveSpeed;
@@ -59,8 +71,11 @@ export class Character {
       if (!isJumping) {
         this.state.isJumping = true;
 
-        // # To handle spriteSheet separate for jump
-        this.spriteState.isJumping = true;
+        // Handle independent animation
+        if (!this.spriteState.isJumping) {
+          this.spriteState.isJumping = true;
+          this.setSpriteCount();
+        }
       }
 
       if (this.stats.jumpSpeedLimit >= this.stats.jumpSpeed) {
@@ -72,11 +87,23 @@ export class Character {
         this.stats.jumpSpeed -= this.stats.jumpSpeedStep;
       }
     }
+
+    if (isAttacking) {
+      if (!this.spriteState.isAttacking) {
+        this.spriteState.isAttacking = true;
+        this.setSpriteCount();
+      }
+    }
   }
+
   getCurrentAnimation() {
+    // # Return state based on the order
     if (this.state.isDamaged) return "damage";
-    if (this.state.isAttacking) return "attack";
+    // Animations independent from the active changing state
+    // It needs to forwards only once
+    if (this.spriteState.isAttacking) return "attack";
     if (this.spriteState.isJumping) return "jump";
+    //
     if (this.state.isRunning && this.state.isWalking) return "run";
     if (this.state.isWalking) return "walk";
     return "idle";
@@ -85,18 +112,19 @@ export class Character {
   setSpriteCount() {
     const animation = this.getCurrentAnimation();
 
+    // Set initial sprite count if it's different animation
     if (this.spriteState.name !== animation) {
       this.spriteState.name = animation;
-      this.spriteCount = this.spriteImages[this.spriteState.name].spriteCount;
+      this.spriteState.spriteCount = this.spriteImages[this.spriteState.name].spriteCount;
       this.spriteState.currentSprite = 0;
       this.max = false;
     } else {
       this.spriteState.currentSprite += this.max ? -1 : 1;
-      if (this.spriteState.currentSprite === 0) this.max = false;
-      else if (
-        this.spriteState.currentSprite >=
-        this.spriteImages[this.spriteState.name].spriteCount - 1
-      ) {
+
+      if (this.spriteState.currentSprite === 0) {
+        this.max = false;
+        if (this.spriteState.isAttacking) this.spriteState.isAttacking = false;
+      } else if (this.spriteState.currentSprite >= this.spriteState.spriteCount - 1) {
         this.max = true;
         if (this.spriteState.isJumping) this.spriteState.isJumping = false;
       }
@@ -139,5 +167,6 @@ export class Character {
 
   setImages() {
     this.loadedImages = true;
+    this.setSpriteCount();
   }
 }

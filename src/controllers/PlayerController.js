@@ -7,7 +7,7 @@ class PlayerController {
       dPressed: false,
 
       wPressed: false,
-      spacePressed: false,
+      " Pressed": false,
 
       shiftPressed: false,
     };
@@ -24,13 +24,11 @@ class PlayerController {
     if (key === "d" || key === "a") {
       this.character.state.isWalking = true;
       this.character.state.direction = key === "d" ? "right" : "left";
-    } else if (key === "w" || key === "space") {
+    } else if (key === "w" || key === " ") {
       this.character.state.isJump = true;
     } else if (key === "shift") {
       this.character.state.isRunning = true;
     }
-
-    this.character.setSpriteCount();
   }
 
   handleKeyUp(e) {
@@ -46,13 +44,21 @@ class PlayerController {
       } else {
         this.character.state.isWalking = false;
       }
-    } else if (key === "space" || key === "w") {
-      if (!this.state.spacePressed && !this.state.wPressed) {
+    } else if (key === " " || key === "w") {
+      if (!this.state[" Pressed"] && !this.state.wPressed) {
         this.character.state.isJump = false;
       }
     } else if (key === "shift") {
       this.character.state.isRunning = false;
     }
+  }
+
+  handleMouseDown() {
+    this.character.state.isAttacking = true;
+  }
+
+  handleMouseUp() {
+    this.character.state.isAttacking = false;
   }
 }
 
