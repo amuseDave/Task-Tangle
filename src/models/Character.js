@@ -1,15 +1,25 @@
 export class Character {
-  constructor(spriteImages) {
-    this.loadedImages = false;
-    this.spriteImages = spriteImages;
+  constructor(spriteImages, stats) {
+    this.loadedImages = false; // MUST
+    this.spriteImages = spriteImages; // MUST
+
+    this.stats = stats;
+    this.state = {
+      isRunning: false,
+      isWalking: false,
+      isJumping: false,
+      isAttacking: false,
+      direction: "right",
+    };
+
+    this.direction = "right";
 
     this.spriteState = "idle";
     this.spriteCount = 1;
     this.spriteAdd = true;
 
-    this.direction = "right";
-
-    this.characterPosX = 0;
+    this.characterPosX = 600;
+    this.characterPosY = 0;
   }
 
   setSpriteState(spriteState, direction) {

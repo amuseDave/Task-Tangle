@@ -1,4 +1,4 @@
-import { keyDown, keyUp } from "../controllers/userEvents";
+import { playerController } from "../controllers/PlayerController";
 
-window.addEventListener("keydown", keyDown);
-window.addEventListener("keyup", keyUp);
+window.addEventListener("keydown", playerController.handleKeyDown.bind(playerController));
+window.addEventListener("keyup", playerController.handleKeyUp.bind(playerController));
