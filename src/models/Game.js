@@ -1,4 +1,4 @@
-export class Game {
+class Game {
   constructor() {
     this.canvasEl = document.getElementById("canvas");
     this.ctx = this.canvasEl.getContext("2d");
@@ -21,11 +21,12 @@ export class Game {
 
     for (const char of this.characters) {
       if (char.loadedImages) {
+        char.setState();
         char.setAnimation({ ctx });
 
-        if (this.currentTime + 120 < timeframe) {
-          char.handleSpriteState();
-          this.currentTime = timeframe;
+        if (char.currentTime + 100 < timeframe) {
+          char.setSpriteCount();
+          char.currentTime = timeframe;
         }
       }
     }
@@ -33,3 +34,5 @@ export class Game {
     requestAnimationFrame(this.animate.bind(this));
   }
 }
+
+export const game = new Game();
