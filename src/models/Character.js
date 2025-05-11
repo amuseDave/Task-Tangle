@@ -24,6 +24,7 @@ export class Character {
 
     this.spriteState = {
       spriteCount: null,
+      frameInterval: null,
       currentSprite: 0,
       max: false,
       name: "",
@@ -76,7 +77,7 @@ export class Character {
       if (!isJumping) {
         this.state.isJumping = true;
 
-        // Handle independent animation
+        // Handle independent instant animation when jumping ends and there's no fall
         if (!this.spriteState.isJumping) {
           this.spriteState.isJumping = true;
           this.setSpriteCount();
@@ -94,9 +95,14 @@ export class Character {
     }
 
     if (isAttacking) {
-      if (!this.spriteState.isAttacking && !this.spriteState.isRunningAttacking) {
+      if (
+        !this.spriteState.isAttacking &&
+        !this.spriteState.isRunningAttacking
+      ) {
         if (this.state.isRunning) this.spriteState.isRunningAttacking = true;
         else this.spriteState.isAttacking = true;
+
+        // Handle instant attack independent animation while not removing last sprite sheet
         if (!this.isAttackInitial) {
           this.isAttackInitial = true;
           this.setSpriteCount();
@@ -106,46 +112,54 @@ export class Character {
   }
 
   getCurrentAnimation() {
+    const { state, spriteState } = this;
     // # Return state based on the order
-    if (this.state.isDamaged) return "damage";
+    if (state.isDamaged) return "damage";
     // Animations independent from the active changing state
     // It needs to forwards only once
-    if (this.spriteState.isRunningAttacking) return "runAttack";
-    if (this.spriteState.isAttacking) return "attack";
-    if (this.spriteState.isJumping) return "jump";
+    if (spriteState.isRunningAttacking) return "runAttack";
+    if (spriteState.isAttacking) return "attack";
+    if (spriteState.isJumping) return "jump";
     //
-    if (this.state.isRunning) return "run";
-    if (this.state.isWalking) return "walk";
+    if (state.isRunning) return "run";
+    if (state.isWalking) return "walk";
     return "idle";
   }
 
   setSpriteCount() {
     const animation = this.getCurrentAnimation();
+    const { spriteState, spriteImages, state } = this;
 
     // Set initial sprite count if it's different animation
-    if (this.spriteState.name !== animation) {
-      this.spriteState.name = animation;
-      this.spriteState.spriteCount = this.spriteImages[this.spriteState.name].spriteCount;
-      this.spriteState.currentSprite = 0;
+    if (spriteState.name !== animation) {
+      const { spriteCount, frameInterval } = spriteImages[animation];
+      spriteState.name = animation;
+      spriteState.spriteCount = spriteCount;
+      spriteState.frameInterval = frameInterval;
+      spriteState.currentSprite = 0;
       this.max = false;
     }
     // Handle sprite loops or endings for specific sprites
     else {
-      this.spriteState.currentSprite += this.max ? -1 : 1;
-      if (this.spriteState.currentSprite === 0) {
-        this.max = false;
+      spriteState.currentSprite += this.max ? -1 : 1;
 
-        if (this.spriteState.isRunningAttacking) {
-          if (!this.state.isAttacking) this.state.isAttackInitial = false;
-          this.spriteState.isRunningAttacking = false;
-        } else if (this.spriteState.isAttacking) {
-          if (!this.state.isAttacking) this.state.isAttackInitial = false;
-          this.spriteState.isAttacking = false;
+      if (spriteState.currentSprite === 0) {
+        this.max = false;
+        // Handle full attack animation state if repeats to not skip the last
+        // If animation repeats do not skip last until it's shown
+        if (spriteState.isRunningAttacking || spriteState.isAttacking) {
+          if (spriteState.isRunningAttacking) {
+            spriteState.isRunningAttacking = false;
+          } else {
+            spriteState.isAttacking = false;
+          }
+          if (!state.isAttacking) state.isAttackInitial = false;
         }
-      } else if (this.spriteState.currentSprite >= this.spriteState.spriteCount - 1) {
+      } else if (spriteState.currentSprite >= spriteState.spriteCount - 1) {
         this.max = true;
 
-        if (this.spriteState.isJumping) this.spriteState.isJumping = false;
+        // Handle one way jumping animation
+        if (spriteState.isJumping) spriteState.isJumping = false;
       }
     }
 
@@ -168,20 +182,31 @@ export class Character {
       ctx.save();
       imgPosX = -(this.characterPosX + imgSingleSprite / 2 + 14);
       ctx.scale(-1, 1);
+      ctx.drawImage(
+        img,
+        imgSingleSprite * currentSprite,
+        0,
+        imgSingleSprite,
+        imgHeight,
+        imgPosX,
+        imgPosY,
+        imgSingleSprite,
+        imgHeight
+      );
+      ctx.restore();
+    } else {
+      ctx.drawImage(
+        img,
+        imgSingleSprite * currentSprite,
+        0,
+        imgSingleSprite,
+        imgHeight,
+        imgPosX,
+        imgPosY,
+        imgSingleSprite,
+        imgHeight
+      );
     }
-
-    ctx.drawImage(
-      img,
-      imgSingleSprite * currentSprite,
-      0,
-      imgSingleSprite,
-      imgHeight,
-      imgPosX,
-      imgPosY,
-      imgSingleSprite,
-      imgHeight
-    );
-    ctx.restore();
   }
 
   setImages() {

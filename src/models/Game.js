@@ -24,7 +24,7 @@ class Game {
         char.setState();
         char.setAnimation({ ctx });
 
-        if (char.currentTime + 100 < timeframe) {
+        if (char.currentTime + char.spriteState.frameInterval < timeframe) {
           char.setSpriteCount();
           char.currentTime = timeframe;
         }

@@ -9,12 +9,12 @@ import { loadImages } from "../utils.js";
 import { Stats } from "./Stats.js";
 
 const warriorImages = {
-  idle: { img: warriorIdle, spriteCount: 6 },
-  run: { img: warriorRun, spriteCount: 6 },
-  walk: { img: warriorWalk, spriteCount: 8 },
-  jump: { img: warriorJump, spriteCount: 5 },
-  attack: { img: warriorAttack1, spriteCount: 4 },
-  runAttack: { img: warriorAttackRun1, spriteCount: 4 },
+  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 120 },
+  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 100 },
+  run: { img: warriorRun, spriteCount: 6, frameInterval: 70 },
+  jump: { img: warriorJump, spriteCount: 5, frameInterval: 100 },
+  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 80 },
+  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 70 },
 };
 
 const warriorStats = new Stats(1.4, 2, 5, 0.1, 0.1, 5, 100);
