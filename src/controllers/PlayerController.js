@@ -1,6 +1,4 @@
-import { warrior } from "../models/Warrior";
-
-class PlayerController {
+export class PlayerController {
   constructor(character) {
     this.state = {
       aPressed: false,
@@ -12,6 +10,11 @@ class PlayerController {
       shiftPressed: false,
     };
     this.character = character;
+
+    this.handleKeyDownBound = this.handleKeyDown.bind(this);
+    this.handleKeyUpBound = this.handleKeyUp.bind(this);
+    this.handleMouseDownBound = this.handleMouseDown.bind(this);
+    this.handleMouseUpBound = this.handleMouseUp.bind(this);
   }
 
   handleKeyDown(e) {
@@ -61,9 +64,22 @@ class PlayerController {
     this.character.state.isAttacking = true;
   }
 
-  handleMouseUp() {
+  handleMouseUp(e) {
+    if (e.button !== 0) return;
     this.character.state.isAttacking = false;
   }
-}
 
-export const playerController = new PlayerController(warrior);
+  setEvents() {
+    window.addEventListener("keydown", this.handleKeyDownBound);
+    window.addEventListener("keyup", this.handleKeyUpBound);
+    window.addEventListener("mousedown", this.handleMouseDownBound);
+    window.addEventListener("mouseup", this.handleMouseUpBound);
+  }
+
+  removeEvents() {
+    window.removeEventListener("keydown", this.handleKeyDownBound);
+    window.removeEventListener("keyup", this.handleKeyUpBound);
+    window.removeEventListener("mousedown", this.handleMouseDownBound);
+    window.removeEventListener("mouseup", this.handleMouseUpBound);
+  }
+}

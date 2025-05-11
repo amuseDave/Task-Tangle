@@ -34,7 +34,7 @@ export class Character {
       isRunningAttacking: false,
     };
 
-    this.characterPosX = 40;
+    this.characterPosX = 20;
     this.characterPosY = 0;
 
     this.currentTime = 0;
@@ -107,7 +107,7 @@ export class Character {
       if (isRunning) speed = this.stats.runSpeed;
       else speed = this.stats.walkSpeed;
 
-      this.characterPosX += this.getCharacterPosition(speed);
+      this.characterPosX = this.getCharacterPosition(speed);
     }
   }
 
@@ -115,19 +115,16 @@ export class Character {
     const { direction } = this.state;
     const { img, spriteCount } = this.spriteImages[this.spriteState.name];
     const singleSprite = img.width / spriteCount;
-    const spriteEmptySpace = singleSprite * this.stats.spriteEmptySpace;
+    const emptySpace = singleSprite * this.stats.spriteEmptySpace;
 
-    let calculation;
-
+    let pos;
     if (direction === "left") {
-      calculation = this.characterPosX + -speed - spriteEmptySpace;
+      pos = this.characterPosX - speed;
     } else {
-      calculation = this.characterPosX + speed + spriteEmptySpace;
+      pos = this.characterPosX + speed;
     }
 
-    if (calculation <= 0) return 0;
-    if (calculation >= game.canvasEl.width) return 0;
-    return direction === "left" ? -speed : speed;
+    return Math.max(emptySpace, Math.min(pos, game.worldWidth - emptySpace));
   }
 
   getCurrentAnimation() {
@@ -185,25 +182,25 @@ export class Character {
     this.currentTime = game.currentTime;
   }
 
-  setAnimation({ ctx }) {
+  setAnimation() {
     const { img, spriteCount } = this.spriteImages[this.spriteState.name];
     const { currentSprite } = this.spriteState;
-    const { height: canvasHeight } = game.canvasEl;
 
+    const { height: canvasHeight } = game.canvasEl;
     const { width: imgWidth, height: imgHeight } = img;
 
     const imgSingleSprite = imgWidth / spriteCount;
 
-    let imgPosX = this.characterPosX - imgSingleSprite / 2;
+    let imgPosX = this.characterPosX - game.camera.x - imgSingleSprite / 2;
     const imgPosY = canvasHeight - imgHeight - this.characterPosY;
 
     // Clip character to the left
     if (this.state.direction === "left") {
-      ctx.save();
-      imgPosX = -(this.characterPosX + imgSingleSprite / 2);
-      ctx.scale(-1, 1);
+      game.ctx.save();
+      imgPosX = -(this.characterPosX - game.camera.x + imgSingleSprite / 2);
+      game.ctx.scale(-1, 1);
     }
-    ctx.drawImage(
+    game.ctx.drawImage(
       img,
       imgSingleSprite * currentSprite,
       0,
@@ -214,7 +211,7 @@ export class Character {
       imgSingleSprite,
       imgHeight
     );
-    if (this.state.direction === "left") ctx.restore();
+    if (this.state.direction === "left") game.ctx.restore();
   }
 
   setImages() {
