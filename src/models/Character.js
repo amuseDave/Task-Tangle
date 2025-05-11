@@ -15,6 +15,7 @@ export class Character {
       isJump: false,
       isFalling: false,
 
+      isAttackInitial: false,
       isAttacking: false,
       isDamaged: false,
 
@@ -96,7 +97,10 @@ export class Character {
       if (!this.spriteState.isAttacking && !this.spriteState.isRunningAttacking) {
         if (this.state.isRunning) this.spriteState.isRunningAttacking = true;
         else this.spriteState.isAttacking = true;
-        this.setSpriteCount();
+        if (!this.isAttackInitial) {
+          this.isAttackInitial = true;
+          this.setSpriteCount();
+        }
       }
     }
   }
@@ -124,16 +128,23 @@ export class Character {
       this.spriteState.spriteCount = this.spriteImages[this.spriteState.name].spriteCount;
       this.spriteState.currentSprite = 0;
       this.max = false;
-    } else {
+    }
+    // Handle sprite loops or endings for specific sprites
+    else {
       this.spriteState.currentSprite += this.max ? -1 : 1;
-
       if (this.spriteState.currentSprite === 0) {
         this.max = false;
-        if (this.spriteState.isAttacking) this.spriteState.isAttacking = false;
+
+        if (this.spriteState.isRunningAttacking) {
+          if (!this.state.isAttacking) this.state.isAttackInitial = false;
+          this.spriteState.isRunningAttacking = false;
+        } else if (this.spriteState.isAttacking) {
+          if (!this.state.isAttacking) this.state.isAttackInitial = false;
+          this.spriteState.isAttacking = false;
+        }
       } else if (this.spriteState.currentSprite >= this.spriteState.spriteCount - 1) {
         this.max = true;
-        if (this.spriteState.isRunningAttacking)
-          this.spriteState.isRunningAttacking = false;
+
         if (this.spriteState.isJumping) this.spriteState.isJumping = false;
       }
     }
