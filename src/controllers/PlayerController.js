@@ -56,7 +56,8 @@ class PlayerController {
     }
   }
 
-  handleMouseDown() {
+  handleMouseDown(e) {
+    if (e.button !== 0) return;
     this.character.state.isAttacking = true;
   }
 

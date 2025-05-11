@@ -1,0 +1,3 @@
+class AIController {
+  constructor() {}
+}

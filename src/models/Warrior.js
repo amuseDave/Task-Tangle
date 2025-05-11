@@ -17,6 +17,6 @@ const warriorImages = {
   runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 70 },
 };
 
-const warriorStats = new Stats(1.4, 2, 5, 0.1, 0.1, 5, 100);
+const warriorStats = new Stats(1.4, 2, 5, 0.1, 0.1, 5, 100, 0.2);
 export const warrior = new Character(warriorImages, warriorStats);
 loadImages(warrior.spriteImages).then(() => warrior.setImages());

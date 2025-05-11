@@ -6,7 +6,8 @@ export class Stats {
     jumpSpeedStep,
     fallSpeedStep,
     fallSpeedLimit,
-    healthPoints
+    healthPoints,
+    spriteEmptySpace
   ) {
     this.walkSpeed = walkSpeed;
     this.runSpeed = runSpeed;
@@ -19,6 +20,8 @@ export class Stats {
     this.fallSpeed = 0;
     this.fallSpeedStep = fallSpeedStep;
     this.fallSpeedLimit = fallSpeedLimit;
+
+    this.spriteEmptySpace = spriteEmptySpace;
 
     this.healthPoints = healthPoints;
   }

@@ -19,14 +19,14 @@ export class Character {
       isAttacking: false,
       isDamaged: false,
 
-      direction: "right",
+      direction: "left",
     };
 
     this.spriteState = {
       spriteCount: null,
       frameInterval: null,
       currentSprite: 0,
-      max: false,
+      isMaxSprite: false,
       name: "",
 
       isJumping: false,
@@ -34,7 +34,7 @@ export class Character {
       isRunningAttacking: false,
     };
 
-    this.characterPosX = 800;
+    this.characterPosX = 40;
     this.characterPosY = 0;
 
     this.currentTime = 0;
@@ -53,14 +53,6 @@ export class Character {
 
       isAttacking,
     } = this.state;
-
-    if (isRunning) {
-      const { runSpeed } = this.stats;
-      this.characterPosX += direction === "left" ? -runSpeed : runSpeed;
-    } else if (isWalking) {
-      const { walkSpeed } = this.stats;
-      this.characterPosX += direction === "left" ? -walkSpeed : walkSpeed;
-    }
 
     if (isFalling) {
       this.characterPosY -= this.stats.fallSpeed;
@@ -109,6 +101,33 @@ export class Character {
         }
       }
     }
+    if (isRunning || isWalking) {
+      // Get current speed
+      let speed;
+      if (isRunning) speed = this.stats.runSpeed;
+      else speed = this.stats.walkSpeed;
+
+      this.characterPosX += this.getCharacterPosition(speed);
+    }
+  }
+
+  getCharacterPosition(speed) {
+    const { direction } = this.state;
+    const { img, spriteCount } = this.spriteImages[this.spriteState.name];
+    const singleSprite = img.width / spriteCount;
+    const spriteEmptySpace = singleSprite * this.stats.spriteEmptySpace;
+
+    let calculation;
+
+    if (direction === "left") {
+      calculation = this.characterPosX + -speed - spriteEmptySpace;
+    } else {
+      calculation = this.characterPosX + speed + spriteEmptySpace;
+    }
+
+    if (calculation <= 0) return 0;
+    if (calculation >= game.canvasEl.width) return 0;
+    return direction === "left" ? -speed : speed;
   }
 
   getCurrentAnimation() {
@@ -137,14 +156,14 @@ export class Character {
       spriteState.spriteCount = spriteCount;
       spriteState.frameInterval = frameInterval;
       spriteState.currentSprite = 0;
-      this.max = false;
+      this.isMaxSprite = false;
     }
     // Handle sprite loops or endings for specific sprites
     else {
-      spriteState.currentSprite += this.max ? -1 : 1;
+      spriteState.currentSprite += this.isMaxSprite ? -1 : 1;
 
       if (spriteState.currentSprite === 0) {
-        this.max = false;
+        this.isMaxSprite = false;
         // Handle full attack animation state if repeats to not skip the last
         // If animation repeats do not skip last until it's shown
         if (spriteState.isRunningAttacking || spriteState.isAttacking) {
@@ -156,7 +175,7 @@ export class Character {
           if (!state.isAttacking) state.isAttackInitial = false;
         }
       } else if (spriteState.currentSprite >= spriteState.spriteCount - 1) {
-        this.max = true;
+        this.isMaxSprite = true;
 
         // Handle one way jumping animation
         if (spriteState.isJumping) spriteState.isJumping = false;
@@ -169,44 +188,33 @@ export class Character {
   setAnimation({ ctx }) {
     const { img, spriteCount } = this.spriteImages[this.spriteState.name];
     const { currentSprite } = this.spriteState;
+    const { height: canvasHeight } = game.canvasEl;
 
     const { width: imgWidth, height: imgHeight } = img;
 
     const imgSingleSprite = imgWidth / spriteCount;
 
-    let imgPosX = this.characterPosX - imgSingleSprite / 2 + 14;
-    const imgPosY = 917 - imgHeight - this.characterPosY;
+    let imgPosX = this.characterPosX - imgSingleSprite / 2;
+    const imgPosY = canvasHeight - imgHeight - this.characterPosY;
 
     // Clip character to the left
     if (this.state.direction === "left") {
       ctx.save();
-      imgPosX = -(this.characterPosX + imgSingleSprite / 2 + 14);
+      imgPosX = -(this.characterPosX + imgSingleSprite / 2);
       ctx.scale(-1, 1);
-      ctx.drawImage(
-        img,
-        imgSingleSprite * currentSprite,
-        0,
-        imgSingleSprite,
-        imgHeight,
-        imgPosX,
-        imgPosY,
-        imgSingleSprite,
-        imgHeight
-      );
-      ctx.restore();
-    } else {
-      ctx.drawImage(
-        img,
-        imgSingleSprite * currentSprite,
-        0,
-        imgSingleSprite,
-        imgHeight,
-        imgPosX,
-        imgPosY,
-        imgSingleSprite,
-        imgHeight
-      );
     }
+    ctx.drawImage(
+      img,
+      imgSingleSprite * currentSprite,
+      0,
+      imgSingleSprite,
+      imgHeight,
+      imgPosX,
+      imgPosY,
+      imgSingleSprite,
+      imgHeight
+    );
+    if (this.state.direction === "left") ctx.restore();
   }
 
   setImages() {

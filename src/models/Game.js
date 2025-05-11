@@ -1,12 +1,14 @@
+import { setCanvasSizeForScreen } from "./Sizes";
+
 class Game {
   constructor() {
     this.canvasEl = document.getElementById("canvas");
     this.ctx = this.canvasEl.getContext("2d");
-    this.canvasEl.width = 1920;
-    this.canvasEl.height = 917;
     this.characters = [];
 
     this.currentTime = 0;
+
+    setCanvasSizeForScreen(this.canvasEl);
   }
 
   addCharacter(character) {
