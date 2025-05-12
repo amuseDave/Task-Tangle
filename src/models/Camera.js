@@ -12,14 +12,14 @@ export class Camera {
     this.x = Math.max(
       0,
       Math.min(
-        target.characterPosX - game.canvasEl.width / 2, // 3400 - 450 =
+        target.posX - game.canvasEl.width / 2, // 3400 - 450 =
         game.worldWidth - game.canvasEl.width // 4000 - 900 = 3100
       )
     );
     this.y = Math.max(
       0,
       Math.min(
-        target.characterPosY - game.canvasEl.height / 2,
+        target.posY - game.canvasEl.height / 2,
         game.worldHeight - game.canvasEl.height
       )
     );

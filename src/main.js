@@ -1,7 +1,7 @@
 import "./styles/style.css";
 
 import { game } from "./models/Game.js";
-import { warrior } from "./models/Characters.js";
+import { warrior } from "./models/Characters/Characters.js";
 
 import { setCanvasSizeForScreen } from "./utils.js";
 

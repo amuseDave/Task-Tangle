@@ -14,7 +14,6 @@ export class PlayerController {
     this.handleKeyDownBound = this.handleKeyDown.bind(this);
     this.handleKeyUpBound = this.handleKeyUp.bind(this);
     this.handleMouseDownBound = this.handleMouseDown.bind(this);
-    this.handleMouseUpBound = this.handleMouseUp.bind(this);
   }
 
   handleKeyDown(e) {
@@ -30,7 +29,9 @@ export class PlayerController {
 
       if (this.state.shiftPressed) this.character.state.isRunning = true;
     } else if (key === "w" || key === " ") {
-      this.character.state.isJump = true;
+      if (!this.character.state.isJumping && !this.character.state.isFalling) {
+        this.character.state.isJumping = true;
+      }
     } else if (key === "shift") {
       if (this.character.state.isWalking) this.character.state.isRunning = true;
     }
@@ -50,10 +51,6 @@ export class PlayerController {
         this.character.state.isWalking = false;
         this.character.state.isRunning = false;
       }
-    } else if (key === " " || key === "w") {
-      if (!this.state[" Pressed"] && !this.state.wPressed) {
-        this.character.state.isJump = false;
-      }
     } else if (key === "shift") {
       this.character.state.isRunning = false;
     }
@@ -61,25 +58,20 @@ export class PlayerController {
 
   handleMouseDown(e) {
     if (e.button !== 0) return;
-    this.character.state.isAttacking = true;
-  }
-
-  handleMouseUp(e) {
-    if (e.button !== 0) return;
-    this.character.state.isAttacking = false;
+    if (!this.character.state.isAttacking) {
+      this.character.state.isAttacking = true;
+    }
   }
 
   setEvents() {
     window.addEventListener("keydown", this.handleKeyDownBound);
     window.addEventListener("keyup", this.handleKeyUpBound);
     window.addEventListener("mousedown", this.handleMouseDownBound);
-    window.addEventListener("mouseup", this.handleMouseUpBound);
   }
 
   removeEvents() {
     window.removeEventListener("keydown", this.handleKeyDownBound);
     window.removeEventListener("keyup", this.handleKeyUpBound);
     window.removeEventListener("mousedown", this.handleMouseDownBound);
-    window.removeEventListener("mouseup", this.handleMouseUpBound);
   }
 }
