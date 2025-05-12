@@ -1,3 +1,5 @@
 class AIController {
-  constructor() {}
+  constructor(sw) {
+    this.sw = sw;
+  }
 }

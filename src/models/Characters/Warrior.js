@@ -1,22 +1,31 @@
-import warriorIdle from "../../assets/warrior/Idle.png";
-import warriorRun from "../../assets/warrior/Run.png";
-import warriorWalk from "../../assets/warrior/Walk.png";
-import warriorJump from "../../assets/warrior/Jump.png";
-import warriorAttack1 from "../../assets/warrior/Attack_1.png";
-import warriorAttackRun1 from "../../assets/warrior/Run+Attack.png";
+import {
+  warriorAttack1,
+  warriorHurt,
+  warriorIdle,
+  warriorAttackRun1,
+  warriorJump,
+  warriorRun,
+  warriorWalk,
+} from "../../assets/warrior/warrior.js";
+
 import { Character } from "./Character.js";
 import { loadImages } from "../../utils.js";
+
 import {
   handleBaseState,
   handleRunAttackState,
   handleRunState,
-} from "../State/StateMethods.js";
+  handleJumpState,
+} from "../../controllers/CharacterMethods/State/StateMethods.js";
+
 import {
   handleBaseSpriteCount,
   handleJumpSprite,
   handleRunAttackSprite,
-} from "../SpriteState/SpriteMethods";
-import { handleJumpState } from "../State/HandleJumpState.js";
+} from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
+
+import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosition.js";
+import { SpriteState } from "../SpriteState.js";
 
 const warriorImages = {
   idle: { img: warriorIdle, spriteCount: 6, frameInterval: 120 },
@@ -25,11 +34,11 @@ const warriorImages = {
   jump: { img: warriorJump, spriteCount: 5, frameInterval: 100 },
   attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 80 },
   runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 70 },
+  hurt: { img: warriorHurt, spriteCount: 2, frameInterval: 120 },
 };
 
 const warriorStats = {
   walkSpeed: 1.4,
-  spriteEmptySpace: 0.2,
   healthPoints: 100,
   fallSpeed: 0.1,
   fallSpeedStep: 0.1,
@@ -62,17 +71,6 @@ const warriorState = {
   isFalling: false,
 };
 
-const warriorSpriteState = {
-  spriteCount: null,
-  frameInterval: null,
-  currentSprite: 0,
-  isMaxSprite: false,
-  name: "",
-
-  isAttacking: false,
-  isRunningAttacking: false,
-};
-
 function warriorSetState() {
   handleBaseState.call(this);
   handleJumpState.call(this);
@@ -80,18 +78,17 @@ function warriorSetState() {
   handleRunAttackState.call(this);
 }
 
-function warriorGetSpriteName() {
+function getWarriorSpriteName() {
   const { state } = this;
-  // # Return state based on the order
   if (state.isHurt) return "damage";
-  // Animations independent from the active changing state
-  // It needs to forwards only once
+
   if (state.isAttackingRunningAnimation) return "runAttack";
   if (state.isAttackingAnimation) return "attack";
   if (state.isJumpingAnimation) return "jump";
-  //
+
   if (state.isRunning) return "run";
   if (state.isWalking) return "walk";
+
   return "idle";
 }
 
@@ -99,12 +96,17 @@ export const warrior = new Character({
   spriteImages: warriorImages,
   stats: warriorStats,
   state: warriorState,
-  spriteState: warriorSpriteState,
+  spriteState: new SpriteState(0.2),
+
   setState: warriorSetState,
-  handleMinSprite: handleRunAttackSprite,
-  handleMaxSprite: handleJumpSprite,
-  setSpriteCount: handleBaseSpriteCount,
-  getSpriteName: warriorGetSpriteName,
+  setSprite: handleBaseSpriteCount,
+
+  setFinishLoopSprite: handleRunAttackSprite,
+  setFinishForwardSprite: handleJumpSprite,
+
+  setMovePosition,
+
+  getSpriteName: getWarriorSpriteName,
 });
 
 loadImages(warrior.spriteImages).then(() => warrior.setImages());

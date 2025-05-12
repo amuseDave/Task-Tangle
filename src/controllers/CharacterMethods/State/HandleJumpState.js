@@ -1,11 +1,10 @@
 function handleJumpState() {
   if (!this.state.isFalling && this.state.isJumping) {
-    console.log("sw");
     // Handle independent instant animation when jumping ends and there's no fall
     if (!this.state.isJumpingInitial) {
       this.state.isJumpingAnimation = true;
       this.state.isJumpingInitial = true;
-      this.setSpriteCount();
+      this.setSprite();
     }
 
     if (0 >= this.stats.jumpSpeed) {

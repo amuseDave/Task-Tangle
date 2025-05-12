@@ -1,12 +1,3 @@
-function handleAttackState() {
-  if (this.state.isAttacking && !this.isAttackingInitial) {
-    this.isAttackingInitial = true;
-    this.state.isAttackingAnimation = true;
-
-    this.setSpriteCount();
-  }
-}
-
 function handleRunAttackState() {
   // Handle instant attack independent animation while not removing last sprite sheet
 
@@ -15,7 +6,14 @@ function handleRunAttackState() {
     if (this.state.isRunning) this.state.isAttackingRunningAnimation = true;
     else this.state.isAttackingAnimation = true;
 
-    this.setSpriteCount();
+    this.setSprite();
+  }
+}
+function handleAttackState() {
+  if (this.state.isAttacking && !this.isAttackingInitial) {
+    this.isAttackingInitial = true;
+    this.state.isAttackingAnimation = true;
+    this.setSprite();
   }
 }
 

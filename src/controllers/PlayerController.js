@@ -14,6 +14,7 @@ export class PlayerController {
     this.handleKeyDownBound = this.handleKeyDown.bind(this);
     this.handleKeyUpBound = this.handleKeyUp.bind(this);
     this.handleMouseDownBound = this.handleMouseDown.bind(this);
+    this.handleMouseUpBound = this.handleMouseUp.bind(this);
   }
 
   handleKeyDown(e) {
@@ -57,21 +58,22 @@ export class PlayerController {
   }
 
   handleMouseDown(e) {
-    if (e.button !== 0) return;
-    if (!this.character.state.isAttacking) {
+    if (e.button === 0 && !this.character.state.isAttacking) {
       this.character.state.isAttacking = true;
     }
   }
-
+  handleMouseUp(e) {}
   setEvents() {
     window.addEventListener("keydown", this.handleKeyDownBound);
     window.addEventListener("keyup", this.handleKeyUpBound);
     window.addEventListener("mousedown", this.handleMouseDownBound);
+    window.addEventListener("mouseup", this.handleMouseUpBound);
   }
 
   removeEvents() {
     window.removeEventListener("keydown", this.handleKeyDownBound);
     window.removeEventListener("keyup", this.handleKeyUpBound);
     window.removeEventListener("mousedown", this.handleMouseDownBound);
+    window.removeEventListener("mouseup", this.handleMouseUpBound);
   }
 }

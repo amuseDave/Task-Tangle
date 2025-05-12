@@ -35,13 +35,15 @@ class Game {
     ctx.clearRect(0, 0, width, height);
 
     this.camera.centerOn();
-    for (const char of this.characters) {
+
+    for (let i = this.characters.length - 1; i >= 0; i--) {
+      const char = this.characters[i];
       if (char.loadedImages) {
-        char.setState({ game: this });
-        char.setAnimation({ ctx, game: this });
+        char.setState();
+        char.setAnimation();
 
         if (char.currentTime + char.spriteState.frameInterval < timeframe) {
-          char.setSpriteCount({ game: this });
+          char.setSprite();
           char.currentTime = timeframe;
         }
       }

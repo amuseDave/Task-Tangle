@@ -9,11 +9,13 @@ export class Character {
     spriteState,
 
     setState,
-    setSpriteCount,
-    handleMinSprite,
-    handleMaxSprite,
+    setSprite,
+    setFinishLoopSprite,
+    setFinishForwardSprite,
 
     getSpriteName,
+
+    setMovePosition,
   }) {
     this.loadedImages = false; // MUST
     this.spriteImages = spriteImages; // MUST
@@ -23,32 +25,18 @@ export class Character {
     this.spriteState = spriteState;
 
     this.setState = setState;
-    this.setSpriteCount = setSpriteCount;
-    this.handleMinSprite = handleMinSprite;
-    this.handleMaxSprite = handleMaxSprite;
+    this.setSprite = setSprite;
+    this.setFinishLoopSprite = setFinishLoopSprite;
+    this.setFinishForwardSprite = setFinishForwardSprite;
+
+    this.setMovePosition = setMovePosition;
 
     this.getSpriteName = getSpriteName;
 
-    this.posX = 22;
+    this.posX = 444;
     this.posY = 0;
 
     this.currentTime = 0;
-  }
-
-  handleMovePosition(speed) {
-    const { direction } = this.state;
-    const { img, spriteCount } = this.spriteImages[this.spriteState.name];
-    const singleSprite = img.width / spriteCount;
-    const emptySpace = singleSprite * this.stats.spriteEmptySpace;
-
-    let pos;
-    if (direction === "left") {
-      pos = this.posX - speed;
-    } else {
-      pos = this.posX + speed;
-    }
-
-    return Math.max(emptySpace, Math.min(pos, game.worldWidth - emptySpace));
   }
 
   setAnimation() {
@@ -85,10 +73,6 @@ export class Character {
 
   setImages() {
     this.loadedImages = true;
-    this.setSpriteCount();
-  }
-
-  updateCurrentTime() {
-    this.currentTime = game.currentTime;
+    this.setSprite();
   }
 }

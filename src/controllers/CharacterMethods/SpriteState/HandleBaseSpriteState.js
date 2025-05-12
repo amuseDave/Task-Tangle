@@ -1,3 +1,5 @@
+import { game } from "../../../models/Game";
+
 function handleBaseSpriteCount() {
   const animation = this.getSpriteName();
   const { spriteState, spriteImages } = this;
@@ -16,18 +18,17 @@ function handleBaseSpriteCount() {
     spriteState.currentSprite += this.isMaxSprite ? -1 : 1;
 
     if (spriteState.currentSprite === 0) {
-      console.log(spriteState.currentSprite);
       this.isMaxSprite = false;
       // Handle Min Sprite for 1 loop animations
-      this.handleMinSprite();
+      this.setFinishLoopSprite();
     } else if (spriteState.currentSprite >= spriteState.spriteCount - 1) {
       this.isMaxSprite = true;
       // Handle Max Sprites for one way one sprite animations
-      this.handleMaxSprite();
+      this.setFinishForwardSprite();
     }
   }
 
-  this.updateCurrentTime();
+  this.currentTime = game.currentTime;
 }
 
 export { handleBaseSpriteCount };
