@@ -6,7 +6,11 @@ function handleBaseSpriteCount() {
 
   // Set initial sprite count if it's different animation
   if (spriteState.name !== animation) {
-    const { spriteCount, frameInterval } = spriteImages[animation];
+    const { spriteCount, frameInterval, img } = spriteImages[animation];
+    const singleSpriteWidth = img.width / spriteCount;
+    const emptySpriteWidth = singleSpriteWidth * spriteState.emptySpace;
+
+    spriteState.width = singleSpriteWidth - emptySpriteWidth;
     spriteState.name = animation;
     spriteState.spriteCount = spriteCount;
     spriteState.frameInterval = frameInterval;

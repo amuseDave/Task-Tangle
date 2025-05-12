@@ -1,5 +1,7 @@
 class AIController {
-  constructor(sw) {
-    this.sw = sw;
+  constructor(character) {
+    this.character = character;
   }
 }
+
+export { AIController };

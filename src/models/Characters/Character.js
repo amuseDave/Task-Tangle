@@ -48,6 +48,15 @@ export class Character {
 
     const imgSingleSprite = imgWidth / spriteCount;
 
+    const hitBoxWidth =
+      imgSingleSprite - imgSingleSprite * (this.spriteState.emptySpace * 3);
+    game.ctx.fillRect(
+      this.posX - game.camera.x - hitBoxWidth / 2,
+      game.canvasEl.height - this.posY - imgHeight,
+      hitBoxWidth,
+      2
+    );
+
     let imgPosX = this.posX - game.camera.x - imgSingleSprite / 2;
     const imgPosY = canvasHeight - imgHeight - this.posY;
 

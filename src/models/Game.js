@@ -1,4 +1,5 @@
 import { PlayerController } from "../controllers/PlayerController.js";
+import { AIController } from "../controllers/AIController.js";
 import { setCanvasSizeForScreen } from "../utils.js";
 import { Camera } from "./Camera.js";
 
@@ -12,21 +13,36 @@ class Game {
     this.camera = new Camera(this.canvasEl);
 
     this.characters = [];
+    this.objects = [];
 
     this.currentTime = 0;
+
+    this.player;
 
     setCanvasSizeForScreen(this.canvasEl);
   }
 
-  addCharacter(character) {
+  addCharacter({ character, x, y, type }) {
+    character.posX = x;
+    character.posY = y;
     this.characters.push(character);
+
+    if (type === "enemy") {
+      new AIController();
+    } else if (type === "player") {
+      this.setPlayer(character);
+      this.camera.setTarget(character);
+    }
   }
 
   setPlayer(player) {
-    if (this.playerController) this.playerController.removeEvents();
+    // if (this.playerController) this.playerController.removeEvents();
+    this.player = player;
     this.playerController = new PlayerController(player);
     this.playerController.setEvents();
   }
+
+  setAI(character) {}
 
   animate(timeframe) {
     const { width, height } = this.canvasEl;
@@ -38,6 +54,7 @@ class Game {
 
     for (let i = this.characters.length - 1; i >= 0; i--) {
       const char = this.characters[i];
+
       if (char.loadedImages) {
         char.setState();
         char.setAnimation();

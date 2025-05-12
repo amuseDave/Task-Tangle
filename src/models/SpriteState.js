@@ -5,6 +5,7 @@ class SpriteState {
     this.currentSprite = 0;
     this.isMaxSprite = false;
     this.name = "";
+    this.width = null;
 
     this.emptySpace = emptySpace;
   }
