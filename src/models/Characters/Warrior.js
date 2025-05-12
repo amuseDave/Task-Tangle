@@ -19,26 +19,26 @@ import {
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
 
 import {
-  handleBaseSpriteCount,
-  handleJumpSprite,
-  handleRunAttackSprite,
+  setBaseSpriteCount,
+  setEndJumpSprite,
+  setEndRunAttackSprite,
 } from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
 
 import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosition.js";
 import { SpriteState } from "../SpriteState.js";
 
 const warriorImages = {
-  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 120 },
-  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 100 },
-  run: { img: warriorRun, spriteCount: 6, frameInterval: 70 },
-  jump: { img: warriorJump, spriteCount: 5, frameInterval: 100 },
-  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 80 },
-  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 70 },
+  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 170 },
+  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 130 },
+  run: { img: warriorRun, spriteCount: 6, frameInterval: 90 },
+  jump: { img: warriorJump, spriteCount: 5, frameInterval: 120 },
+  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 110 },
+  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 110 },
   hurt: { img: warriorHurt, spriteCount: 2, frameInterval: 120 },
 };
 
 const warriorStats = {
-  walkSpeed: 1.4,
+  walkSpeed: 1.2,
   healthPoints: 100,
   fallSpeed: 0.1,
   fallSpeedStep: 0.1,
@@ -77,6 +77,10 @@ function warriorSetState() {
   handleRunState.call(this);
   handleRunAttackState.call(this);
 }
+function warriorSetEndSprite() {
+  setEndRunAttackSprite.call(this);
+  setEndJumpSprite.call(this);
+}
 
 function getWarriorSpriteName() {
   const { state } = this;
@@ -99,10 +103,8 @@ export const warrior = new Character({
   spriteState: new SpriteState(0.2),
 
   setState: warriorSetState,
-  setSprite: handleBaseSpriteCount,
-
-  setFinishLoopSprite: handleRunAttackSprite,
-  setFinishForwardSprite: handleJumpSprite,
+  setSprite: setBaseSpriteCount,
+  setEndSprite: warriorSetEndSprite,
 
   setMovePosition,
 

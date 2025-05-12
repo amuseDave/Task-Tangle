@@ -13,7 +13,7 @@ import {
   handleAttackState,
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
 
-import { handleBaseSpriteCount } from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
+import { setBaseSpriteCount } from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
 
 import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosition.js";
 
@@ -22,7 +22,7 @@ import { Character } from "./Character.js";
 import { loadImages } from "../../utils";
 
 const skeletonArcherImages = {
-  idle: { img: skeletonIdle, spriteCount: 7, frameInterval: 170 },
+  idle: { img: skeletonIdle, spriteCount: 7, frameInterval: 180 },
   walk: { img: skeletonWalk, spriteCount: 8, frameInterval: 100 },
   attack: { img: skeletonAttack, spriteCount: 5, frameInterval: 90 },
   shoot: { img: skeletonShot, spriteCount: 15, frameInterval: 100 },
@@ -85,10 +85,8 @@ export const skeletonArcher = new Character({
   spriteState: new SpriteState(0.2),
 
   setState: skeletonArcherSetState,
-  setSprite: handleBaseSpriteCount,
-
-  setFinishLoopSprite: () => {},
-  setFinishForwardSprite: () => {},
+  setSprite: setBaseSpriteCount,
+  setEndSprite: () => {},
 
   setMovePosition,
 

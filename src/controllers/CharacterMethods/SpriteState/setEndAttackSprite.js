@@ -1,4 +1,4 @@
-function handleRunAttackSprite() {
+function setEndRunAttackSprite() {
   if (this.state.isAttacking) {
     this.state.isAttacking = false;
     this.state.isAttackingInitial = false;
@@ -7,7 +7,7 @@ function handleRunAttackSprite() {
   }
 }
 
-function handleAttackSprite() {
+function setEndAttackSprite() {
   if (this.state.isAttacking) {
     this.state.isAttacking = false;
     this.state.isAttackingAnimation = false;
@@ -15,4 +15,4 @@ function handleAttackSprite() {
   }
 }
 
-export { handleAttackSprite, handleRunAttackSprite };
+export { setEndAttackSprite, setEndRunAttackSprite };

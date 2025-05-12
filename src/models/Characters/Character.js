@@ -10,8 +10,7 @@ export class Character {
 
     setState,
     setSprite,
-    setFinishLoopSprite,
-    setFinishForwardSprite,
+    setEndSprite,
 
     getSpriteName,
 
@@ -26,8 +25,8 @@ export class Character {
 
     this.setState = setState;
     this.setSprite = setSprite;
-    this.setFinishLoopSprite = setFinishLoopSprite;
-    this.setFinishForwardSprite = setFinishForwardSprite;
+
+    this.setEndSprite = setEndSprite;
 
     this.setMovePosition = setMovePosition;
 
