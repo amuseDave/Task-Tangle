@@ -1,7 +1,7 @@
-function handleJumpState() {
+function setJumpState() {
   if (!this.state.isFalling && this.state.isJumping) {
     // Handle independent instant animation when jumping ends and there's no fall
-    if (!this.state.isJumpingInitial) {
+    if (!this.state.isAnimating && !this.state.isJumpingInitial) {
       this.state.isJumpingAnimation = true;
       this.state.isJumpingInitial = true;
       this.setSprite();
@@ -19,4 +19,4 @@ function handleJumpState() {
   }
 }
 
-export { handleJumpState };
+export { setJumpState };

@@ -40,15 +40,15 @@ export class Character {
 
   setAnimation() {
     const { img, spriteCount } = this.spriteImages[this.spriteState.name];
-    const { currentSprite } = this.spriteState;
+    const { currentSprite, emptySpace } = this.spriteState;
+    const { direction, attackDirection, isAttacking } = this.state;
 
     const { height: canvasHeight } = game.canvasEl;
     const { width: imgWidth, height: imgHeight } = img;
 
     const imgSingleSprite = imgWidth / spriteCount;
 
-    const hitBoxWidth =
-      imgSingleSprite - imgSingleSprite * (this.spriteState.emptySpace * 3);
+    const hitBoxWidth = imgSingleSprite - imgSingleSprite * (emptySpace * 3);
     game.ctx.fillRect(
       this.posX - game.camera.x - hitBoxWidth / 2,
       game.canvasEl.height - this.posY - imgHeight,
@@ -59,8 +59,10 @@ export class Character {
     let imgPosX = this.posX - game.camera.x - imgSingleSprite / 2;
     const imgPosY = canvasHeight - imgHeight - this.posY;
 
+    const activeDirection = isAttacking ? attackDirection : direction;
+
     // Clip character to the left
-    if (this.state.direction === "left") {
+    if (activeDirection === "left") {
       game.ctx.save();
       imgPosX = -(this.posX - game.camera.x + imgSingleSprite / 2);
       game.ctx.scale(-1, 1);
@@ -76,7 +78,7 @@ export class Character {
       imgSingleSprite,
       imgHeight
     );
-    if (this.state.direction === "left") game.ctx.restore();
+    if (activeDirection === "left") game.ctx.restore();
   }
 
   setImages() {

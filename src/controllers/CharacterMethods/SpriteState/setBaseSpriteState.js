@@ -17,7 +17,6 @@ function setBaseSpriteCount() {
   // Handle sprite loops or endings for specific sprites
   else {
     spriteState.currentSprite += 1;
-
     if (spriteState.currentSprite >= spriteState.spriteCount - 1) {
       spriteState.currentSprite = 0;
       this.setEndSprite();

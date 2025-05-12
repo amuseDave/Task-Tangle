@@ -1,7 +1,4 @@
-export { handleJumpState } from "./HandleJumpState.js";
-export { handleBaseState } from "./HandleBaseState.js";
-export { handleWalkState, handleRunState } from "./HandleMovementState.js";
-export {
-  handleAttackState,
-  handleRunAttackState,
-} from "./HandleAttackState.js";
+export { setJumpState } from "./setJumpState.js";
+export { setBaseState } from "./setBaseState.js";
+export { setWalkState, setRunState } from "./setMovementState.js";
+export { setAttackState, setRunAttackState } from "./setAttackState.js";

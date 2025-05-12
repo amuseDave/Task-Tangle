@@ -12,10 +12,10 @@ import { Character } from "./Character.js";
 import { loadImages } from "../../utils.js";
 
 import {
-  handleBaseState,
-  handleRunAttackState,
-  handleRunState,
-  handleJumpState,
+  setBaseState,
+  setRunAttackState,
+  setRunState,
+  setJumpState,
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
 
 import {
@@ -28,13 +28,13 @@ import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosit
 import { SpriteState } from "../SpriteState.js";
 
 const warriorImages = {
-  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 170 },
-  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 130 },
-  run: { img: warriorRun, spriteCount: 6, frameInterval: 90 },
-  jump: { img: warriorJump, spriteCount: 5, frameInterval: 120 },
-  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 110 },
-  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 110 },
-  hurt: { img: warriorHurt, spriteCount: 2, frameInterval: 120 },
+  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 140 },
+  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 110 },
+  run: { img: warriorRun, spriteCount: 6, frameInterval: 110 },
+  jump: { img: warriorJump, spriteCount: 5, frameInterval: 110 },
+  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 100 },
+  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 100 },
+  hurt: { img: warriorHurt, spriteCount: 2, frameInterval: 200 },
 };
 
 const warriorStats = {
@@ -57,11 +57,13 @@ const warriorState = {
   isWalking: false,
   isHurt: false,
   direction: "right",
+  attackDirection: "right",
 
   isAttacking: false,
-  isAttackingInitial: false,
   isAttackingAnimation: false,
   isAttackingRunningAnimation: false,
+
+  isAnimating: false,
 
   isJumping: false,
   isJumpingAnimation: false,
@@ -72,10 +74,10 @@ const warriorState = {
 };
 
 function warriorSetState() {
-  handleBaseState.call(this);
-  handleJumpState.call(this);
-  handleRunState.call(this);
-  handleRunAttackState.call(this);
+  setBaseState.call(this);
+  setJumpState.call(this);
+  setRunState.call(this);
+  setRunAttackState.call(this);
 }
 function warriorSetEndSprite() {
   setEndRunAttackSprite.call(this);

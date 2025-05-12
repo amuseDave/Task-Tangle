@@ -1,4 +1,4 @@
-export function handleFallState() {
+function setFallState() {
   const { isFalling } = this.state;
 
   if (isFalling) {
@@ -14,3 +14,5 @@ export function handleFallState() {
     }
   }
 }
+
+export { setFallState };

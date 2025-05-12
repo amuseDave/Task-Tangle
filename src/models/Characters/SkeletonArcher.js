@@ -8,9 +8,9 @@ import {
 } from "../../assets/skeleton_archer/skeletonArcher";
 
 import {
-  handleBaseState,
-  handleWalkState,
-  handleAttackState,
+  setBaseState,
+  setWalkState,
+  setAttackState,
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
 
 import { setBaseSpriteCount } from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
@@ -22,7 +22,7 @@ import { Character } from "./Character.js";
 import { loadImages } from "../../utils";
 
 const skeletonArcherImages = {
-  idle: { img: skeletonIdle, spriteCount: 7, frameInterval: 180 },
+  idle: { img: skeletonIdle, spriteCount: 7, frameInterval: 120 },
   walk: { img: skeletonWalk, spriteCount: 8, frameInterval: 100 },
   attack: { img: skeletonAttack, spriteCount: 5, frameInterval: 90 },
   shoot: { img: skeletonShot, spriteCount: 15, frameInterval: 100 },
@@ -59,9 +59,9 @@ const skeletonArcherState = {
 };
 
 function skeletonArcherSetState() {
-  handleBaseState.call(this);
-  handleAttackState.call(this);
-  handleWalkState.call(this);
+  setBaseState.call(this);
+  setAttackState.call(this);
+  setWalkState.call(this);
 }
 
 function getSkeletonArcherSpriteName() {
