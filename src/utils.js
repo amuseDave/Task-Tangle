@@ -1,13 +1,18 @@
 export async function loadImages(imgObj) {
+  const imgArr = [];
   for (const key in imgObj) {
-    await new Promise((resolve, reject) => {
-      const image = new Image();
-      image.src = imgObj[key].img;
-      imgObj[key].img = image;
-      image.onload = resolve;
-      image.onerror = reject;
-    });
+    imgArr.push(
+      new Promise((resolve, reject) => {
+        const image = new Image();
+        image.src = imgObj[key].img;
+        imgObj[key].img = image;
+        image.onload = resolve;
+        image.onerror = reject;
+      })
+    );
   }
+
+  await Promise.all(imgArr);
 
   return;
 }

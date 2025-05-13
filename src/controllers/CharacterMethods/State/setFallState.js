@@ -1,7 +1,5 @@
 function setFallState() {
-  const { isFalling } = this.state;
-
-  if (isFalling) {
+  if (this.state.isFalling) {
     this.posY -= this.stats.fallSpeed;
     if (this.stats.fallSpeedLimit > this.stats.fallSpeed) {
       this.stats.fallSpeed += this.stats.fallSpeedStep;

@@ -5,7 +5,7 @@ export class Camera {
     this.x = 0;
     this.y = 0;
 
-    this.target;
+    this.target = { posX: 0, posY: 0 };
   }
 
   centerOn(target = this.target) {

@@ -27,13 +27,11 @@ function getSkeletonArcherActiveFrameName() {
   return "idle";
 }
 
-export const skeletonArcher = new Character({
+export const skeletonArcher = {
   frameImages: skeletonArcherImages,
   stats: new Stats(0.2, 1.1, 50, 0.1, 0.1, 5, 5),
   setState: skeletonArcherSetState,
   setFrames: setFrames,
 
   getActiveFrameName: getSkeletonArcherActiveFrameName,
-});
-
-loadImages(skeletonArcher.frameImages).then(() => skeletonArcher.setImages());
+};

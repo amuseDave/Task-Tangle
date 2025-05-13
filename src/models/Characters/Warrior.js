@@ -1,15 +1,12 @@
 import { warriorImages } from "../../assets/warrior/warrior.js";
 
+import { setFrames } from "../../controllers/CharacterMethods/setFrames.js";
 import {
   setState,
   setRunAttackState,
   setJumpState,
   setMoveState,
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
-import { setFrames } from "../../controllers/CharacterMethods/setFrames.js";
-
-import { Character } from "./Character.js";
-import { loadImages } from "../../utils.js";
 import { Stats } from "./Stats.js";
 
 function warriorSetState() {
@@ -29,14 +26,10 @@ function getWarriorActiveFrameName() {
   return "idle";
 }
 
-export const warrior = new Character({
+export const warrior = {
   frameImages: warriorImages,
-
   stats: new Stats(0.2, 1.2, 100, 0.1, 0.1, 5, 10, 2, 5, 5, 0.1, 0.2),
   setState: warriorSetState,
-  setFrames: setFrames,
-
+  setFrames,
   getActiveFrameName: getWarriorActiveFrameName,
-});
-
-loadImages(warrior.frameImages).then(() => warrior.setImages());
+};

@@ -73,9 +73,4 @@ export class Character {
     );
     ///
   }
-
-  setImages() {
-    this.loadedImages = true;
-    this.setFrames();
-  }
 }

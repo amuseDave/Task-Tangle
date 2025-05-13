@@ -68,11 +68,9 @@ class Game {
   animateCharacters() {
     for (let i = this.characters.length - 1; i >= 0; i--) {
       const char = this.characters[i];
-      if (char.loadedImages) {
-        char.setState();
-        char.setFrames();
-        char.setAnimation();
-      }
+      char.setState();
+      char.setFrames();
+      char.setAnimation();
     }
   }
 }
