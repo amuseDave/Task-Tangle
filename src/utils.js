@@ -1,20 +1,15 @@
-export async function loadImages(imgObj) {
-  const imgArr = [];
-  for (const key in imgObj) {
-    imgArr.push(
-      new Promise((resolve, reject) => {
-        const image = new Image();
-        image.src = imgObj[key].img;
-        imgObj[key].img = image;
-        image.onload = resolve;
-        image.onerror = reject;
-      })
-    );
+export async function loadImages(imgArr) {
+  for (let i = 0; i < imgArr.length; i++) {
+    new Promise((res, rej) => {
+      const image = new Image();
+      image.src = imgArr[i].img;
+      imgArr[i].img = image;
+      image.onload = res;
+      image.onerror = rej;
+    });
   }
-
   await Promise.all(imgArr);
-
-  return;
+  return imgArr;
 }
 
 export function setCanvasSizeForScreen(canvas) {

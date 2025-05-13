@@ -1,33 +1,34 @@
 import { game } from "../Game";
 
 class GameObject {
-  constructor(img, posX, posY, isStatic) {
-    this.posX = posX;
-    this.posY = posY;
-    this.isStatic = isStatic;
+  constructor(img, relativeX, relativeY, dynamicX, width = null, height = null) {
     this.img = img;
+    this.relativeX = relativeX;
+    this.relativeY = relativeY;
+    this.dynamicX = dynamicX;
 
-    this.loadedImage = false;
-    this.loadImage();
+    this.width = width;
+    this.height = height;
   }
 
   draw() {
+    console.log(this.relativeX);
     const { width, height } = game.canvasEl;
-    const { img, posX, posY } = this;
-    const dx = this.isStatic ? posX : posX - game.camera.x;
-    game.ctx.drawImage(img, dx, posY);
-  }
+    const { img, relativeX, relativeY } = this;
 
-  loadImage() {
-    const image = new Image();
-    image.src = this.img;
-    image.onload = () => {
-      this.loadedImage = true;
-      this.img = image;
+    const dx = relativeX - game.camera.x * this.dynamicX;
 
-      this.posX = game.canvasEl.width / 2;
-      this.posY = image.height / 4;
-    };
+    if (this.width) {
+      game.ctx.drawImage(
+        img,
+        dx,
+        height * relativeY - img.height / 2,
+        this.width,
+        this.height
+      );
+    } else {
+      game.ctx.drawImage(img, dx, 0);
+    }
   }
 }
 

@@ -46,22 +46,20 @@ class Game {
 
   animate(timeframe) {
     this.currentTime = timeframe;
+
     const { width, height } = this.canvasEl;
-
     this.ctx.clearRect(0, 0, width, height);
-    this.camera.centerOn();
 
-    this.animateCharacters();
+    this.camera.centerOn();
     this.animateObjects();
+    this.animateCharacters();
 
     requestAnimationFrame(this.animate.bind(this));
   }
   animateObjects() {
     for (let i = this.objects.length - 1; i >= 0; i--) {
       const object = this.objects[i];
-      if (object.loadedImage) {
-        object.draw();
-      }
+      object.draw();
     }
   }
 

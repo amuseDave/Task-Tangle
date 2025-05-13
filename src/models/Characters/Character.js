@@ -17,7 +17,7 @@ export class Character {
     this.frameImages = frameImages; // MUST
 
     this.state = {};
-    this.frameState = { emptySpace: 0.2 };
+    this.frameState = { emptySpace };
     this.stats = stats;
 
     this.setState = setState;

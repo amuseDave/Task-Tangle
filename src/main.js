@@ -1,11 +1,8 @@
 import "./styles/style.css";
-
+import { setCanvasSizeForScreen } from "./utils.js";
 import { game } from "./models/Game.js";
 import "./models/Characters/Characters.js";
-import { setCanvasSizeForScreen } from "./utils.js";
-import { moonObject } from "./models/Objetcs/Objects";
-
-game.addObject(moonObject);
+import "./models/Objetcs/Objects.js";
 
 requestAnimationFrame(game.animate.bind(game));
 
