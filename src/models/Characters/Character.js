@@ -2,87 +2,80 @@ import { game } from "../Game";
 
 export class Character {
   constructor({
-    spriteImages,
-
-    stats,
-    state,
-    spriteState,
+    frameImages,
 
     setState,
-    setSprite,
-    setEndSprite,
+    setFrames,
+    stats,
+    emptySpace,
 
-    getSpriteName,
+    getActiveFrameName,
 
     setMovePosition,
   }) {
     this.loadedImages = false; // MUST
-    this.spriteImages = spriteImages; // MUST
+    this.frameImages = frameImages; // MUST
 
+    this.state = {};
+    this.frameState = { emptySpace: 0.2 };
     this.stats = stats;
-    this.state = state;
-    this.spriteState = spriteState;
 
     this.setState = setState;
-    this.setSprite = setSprite;
-
-    this.setEndSprite = setEndSprite;
-
-    this.setMovePosition = setMovePosition;
-
-    this.getSpriteName = getSpriteName;
+    this.setFrames = setFrames;
+    this.getActiveFrameName = getActiveFrameName;
 
     this.posX = 444;
     this.posY = 0;
-
-    this.currentTime = 0;
   }
 
   setAnimation() {
-    const { img, spriteCount } = this.spriteImages[this.spriteState.name];
-    const { currentSprite, emptySpace } = this.spriteState;
-    const { direction, attackDirection, isAttacking } = this.state;
+    const { img, frameCount, frame } = this.frameImages[this.frameState.name];
+    const { emptySpace } = this.frameState;
+    const { direction, attackDirection, isAttack } = this.state;
 
     const { height: canvasHeight } = game.canvasEl;
     const { width: imgWidth, height: imgHeight } = img;
 
-    const imgSingleSprite = imgWidth / spriteCount;
+    const imgSingleframe = imgWidth / frameCount;
 
-    const hitBoxWidth = imgSingleSprite - imgSingleSprite * (emptySpace * 3);
+    let imgPosX = this.posX - game.camera.x - imgSingleframe / 2;
+    const imgPosY = canvasHeight - imgHeight - this.posY;
+
+    const activeDirection = isAttack ? attackDirection : direction;
+
+    // Clip character to the left
+    if (activeDirection === "left") {
+      game.ctx.save();
+      imgPosX = -(this.posX - game.camera.x + imgSingleframe / 2);
+      game.ctx.scale(-1, 1);
+    }
+
+    game.ctx.drawImage(
+      img,
+      imgSingleframe * frame,
+      0,
+      imgSingleframe,
+      imgHeight,
+      imgPosX,
+      imgPosY,
+      imgSingleframe,
+      imgHeight
+    );
+    if (activeDirection === "left") game.ctx.restore();
+
+    // Test hitbox
+    const hitBoxWidth = imgSingleframe - imgSingleframe * (emptySpace * 3);
     game.ctx.fillRect(
       this.posX - game.camera.x - hitBoxWidth / 2,
       game.canvasEl.height - this.posY - imgHeight,
       hitBoxWidth,
       2
     );
-
-    let imgPosX = this.posX - game.camera.x - imgSingleSprite / 2;
-    const imgPosY = canvasHeight - imgHeight - this.posY;
-
-    const activeDirection = isAttacking ? attackDirection : direction;
-
-    // Clip character to the left
-    if (activeDirection === "left") {
-      game.ctx.save();
-      imgPosX = -(this.posX - game.camera.x + imgSingleSprite / 2);
-      game.ctx.scale(-1, 1);
-    }
-    game.ctx.drawImage(
-      img,
-      imgSingleSprite * currentSprite,
-      0,
-      imgSingleSprite,
-      imgHeight,
-      imgPosX,
-      imgPosY,
-      imgSingleSprite,
-      imgHeight
-    );
-    if (activeDirection === "left") game.ctx.restore();
+    ///
   }
 
   setImages() {
     this.loadedImages = true;
-    this.setSprite();
+    this.setFrames();
   }
 }

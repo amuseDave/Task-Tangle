@@ -1,17 +1,10 @@
-import warriorIdle from "./Idle.png";
-import warriorRun from "./Run.png";
-import warriorWalk from "./Walk.png";
-import warriorJump from "./Jump.png";
-import warriorAttack1 from "./Attack_1.png";
-import warriorAttackRun1 from "./Run+Attack.png";
-import warriorHurt from "./Hurt.png";
+import Idle from "./Idle.png";
+import Run from "./Run.png";
+import Walk from "./Walk.png";
+import Jump from "./Jump.png";
+import Attack1 from "./Attack_1.png";
+import AttackRun from "./Run+Attack.png";
+import Hurt from "./Hurt.png";
+import Fall from "./fall.png";
 
-export {
-  warriorIdle,
-  warriorRun,
-  warriorWalk,
-  warriorJump,
-  warriorAttack1,
-  warriorAttackRun1,
-  warriorHurt,
-};
+export { Idle, Run, Walk, Jump, Attack1, AttackRun, Hurt, Fall };

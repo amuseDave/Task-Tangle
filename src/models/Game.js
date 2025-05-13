@@ -45,6 +45,7 @@ class Game {
   setAI(character) {}
 
   animate(timeframe) {
+    this.currentTime = timeframe;
     const { width, height } = this.canvasEl;
     const ctx = this.ctx;
 
@@ -57,12 +58,8 @@ class Game {
 
       if (char.loadedImages) {
         char.setState();
+        char.setFrames();
         char.setAnimation();
-
-        if (char.currentTime + char.spriteState.frameInterval < timeframe) {
-          char.setSprite();
-          char.currentTime = timeframe;
-        }
       }
     }
 

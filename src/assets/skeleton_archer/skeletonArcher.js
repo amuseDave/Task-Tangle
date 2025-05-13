@@ -1,15 +1,8 @@
-import skeletonIdle from "./Idle.png";
-import skeletonWalk from "./Walk.png";
-import skeletonAttack from "./Attack_1.png";
-import skeletonArrow from "./Arrow.png";
-import skeletonShot from "./Shot_1.png";
-import skeletonShot2 from "./Shot_1.png";
+import Idle from "./Idle.png";
+import Walk from "./Walk.png";
+import Attack from "./Attack_1.png";
+import Arrow from "./Arrow.png";
+import Shoot from "./Shot_1.png";
+import Shoot2 from "./Shot_1.png";
 
-export {
-  skeletonArrow,
-  skeletonAttack,
-  skeletonIdle,
-  skeletonShot,
-  skeletonShot2,
-  skeletonWalk,
-};
+export { Arrow, Attack, Idle, Shoot, Shoot2, Walk };

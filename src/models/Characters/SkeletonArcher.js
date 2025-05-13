@@ -1,96 +1,57 @@
 import {
-  skeletonIdle,
-  skeletonWalk,
-  skeletonAttack,
-  skeletonShot,
-  skeletonShot2,
-  skeletonArrow,
+  Idle,
+  Walk,
+  Attack,
+  Shoot,
+  Shoot2,
+  Arrow,
 } from "../../assets/skeleton_archer/skeletonArcher";
 
 import {
-  setBaseState,
-  setWalkState,
+  setState,
   setAttackState,
+  setMoveState,
 } from "../../controllers/CharacterMethods/State/StateMethods.js";
 
-import { setBaseSpriteCount } from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
+import { setFrames } from "../../controllers/CharacterMethods/setFrames";
 
-import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosition.js";
-
-import { SpriteState } from "../SpriteState.js";
 import { Character } from "./Character.js";
 import { loadImages } from "../../utils";
+import { Stats } from "../Stats";
 
 const skeletonArcherImages = {
-  idle: { img: skeletonIdle, spriteCount: 7, frameInterval: 120 },
-  walk: { img: skeletonWalk, spriteCount: 8, frameInterval: 100 },
-  attack: { img: skeletonAttack, spriteCount: 5, frameInterval: 90 },
-  shoot: { img: skeletonShot, spriteCount: 15, frameInterval: 100 },
-  shoot2: { img: skeletonShot2, spriteCount: 15, frameInterval: 100 },
-  arrow: { img: skeletonArrow, spriteCount: null, frameInterval: null },
+  idle: { img: Idle, frameCount: 7, frameInterval: 120, frame: 0 },
+  walk: { img: Walk, frameCount: 8, frameInterval: 100, frame: 0 },
+  attack: { img: Attack, frameCount: 5, frameInterval: 90, frame: 0 },
+  shoot: { img: Shoot, frameCount: 15, frameInterval: 100, frame: 0 },
+  shoot2: { img: Shoot2, frameCount: 15, frameInterval: 100, frame: 0 },
+  arrow: { img: Arrow },
 };
 
-const skeletonArcherStats = {
-  walkSpeed: 1.1,
-  healthPoints: 50,
-
-  fallSpeed: 0.1,
-  fallSpeedStep: 0.1,
-  fallSpeedLimit: 5,
-
-  attackDamage: 5,
-};
-
-const skeletonArcherState = {
-  isWalking: false,
-  isHurt: false,
-  direction: "left",
-
-  isAttacking: false,
-  isAttackingInitial: false,
-  isAttackingAnimation: false,
-
-  isShooting: false,
-  isShootingInitial: false,
-  isShootingOneAnimation: false,
-  isShootingTwoAnimation: false,
-
-  isFalling: false,
-};
+const skeletonArcherStats = new Stats(0.2, 1.1, 50, 0.1, 0.1, 5, 5);
 
 function skeletonArcherSetState() {
-  setBaseState.call(this);
+  setState.call(this);
   setAttackState.call(this);
-  setWalkState.call(this);
+  setMoveState.call(this);
 }
 
-function getSkeletonArcherSpriteName() {
+function getSkeletonArcherActiveFrameName() {
   const { state } = this;
-  if (state.isHurt) return "damage";
-
-  if (state.isAttackingAnimation) return "attack";
-
-  if (state.isShootingOneAnimation) return "shoot";
-  if (state.isShooting2OneAnimation) return "shoot2";
-
+  if (state.isHurt) return "hurt";
+  if (state.animationLock) return state.animationLock;
+  if (state.isFalling) return "fall";
   if (state.isWalking) return "walk";
-
   return "idle";
 }
 
 export const skeletonArcher = new Character({
-  spriteImages: skeletonArcherImages,
+  frameImages: skeletonArcherImages,
   stats: skeletonArcherStats,
-  state: skeletonArcherState,
-  spriteState: new SpriteState(0.2),
-
   setState: skeletonArcherSetState,
-  setSprite: setBaseSpriteCount,
-  setEndSprite: () => {},
+  setFrames: setFrames,
 
-  setMovePosition,
-
-  getSpriteName: getSkeletonArcherSpriteName,
+  getActiveFrameName: getSkeletonArcherActiveFrameName,
 });
 
-loadImages(skeletonArcher.spriteImages).then(() => skeletonArcher.setImages());
+loadImages(skeletonArcher.frameImages).then(() => skeletonArcher.setImages());

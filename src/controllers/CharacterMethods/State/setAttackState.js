@@ -1,20 +1,17 @@
 function setRunAttack() {
-  if (this.state.isRunning) this.state.isAttackingRunningAnimation = true;
-  else this.state.isAttackingAnimation = true;
+  if (this.state.isRunning) this.state.animationLock = "runAttack";
+  else this.state.animationLock = "attack";
 }
 
 function setAttack() {
-  this.state.isAttackingAnimation = true;
+  this.state.animationLock = "attack";
 }
 
 function setCustomAttackState(fn) {
-  // Handle instant attack one way separate from the rest animation
   return function () {
-    if (this.state.isAttacking && !this.state.isAnimating) {
-      this.state.isAnimating = true;
+    if (this.state.isAttack && !this.state.animationLock) {
       fn.call(this);
       this.state.attackDirection = this.state.direction;
-      this.setSprite();
     }
   };
 }

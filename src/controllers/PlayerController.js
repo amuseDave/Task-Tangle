@@ -27,7 +27,6 @@ export class PlayerController {
     if (key === "d" || key === "a") {
       this.character.state.isWalking = true;
       this.character.state.direction = key === "d" ? "right" : "left";
-
       if (this.state.shiftPressed) this.character.state.isRunning = true;
     } else if (key === "w" || key === " ") {
       if (!this.character.state.isJumping && !this.character.state.isFalling) {
@@ -58,8 +57,10 @@ export class PlayerController {
   }
 
   handleMouseDown(e) {
-    if (e.button === 0 && !this.character.state.isAttacking) {
-      this.character.state.isAttacking = true;
+    if (e.button === 0 && !this.character.state.animationLock) {
+      this.character.state.isAttack = true;
+    } else if (e.button !== 0) {
+      this.character.state.isHurt = true;
     }
   }
   handleMouseUp(e) {}

@@ -1,116 +1,63 @@
 import {
-  warriorAttack1,
-  warriorHurt,
-  warriorIdle,
-  warriorAttackRun1,
-  warriorJump,
-  warriorRun,
-  warriorWalk,
+  Attack1,
+  Hurt,
+  Idle,
+  AttackRun,
+  Jump,
+  Run,
+  Walk,
+  Fall,
 } from "../../assets/warrior/warrior.js";
+
+import {
+  setState,
+  setRunAttackState,
+  setJumpState,
+  setMoveState,
+} from "../../controllers/CharacterMethods/State/StateMethods.js";
+import { setFrames } from "../../controllers/CharacterMethods/setFrames.js";
 
 import { Character } from "./Character.js";
 import { loadImages } from "../../utils.js";
-
-import {
-  setBaseState,
-  setRunAttackState,
-  setRunState,
-  setJumpState,
-} from "../../controllers/CharacterMethods/State/StateMethods.js";
-
-import {
-  setBaseSpriteCount,
-  setEndJumpSprite,
-  setEndRunAttackSprite,
-} from "../../controllers/CharacterMethods/SpriteState/SpriteMethods";
-
-import { setMovePosition } from "../../controllers/CharacterMethods/SetMovePosition.js";
-import { SpriteState } from "../SpriteState.js";
+import { Stats } from "../Stats.js";
 
 const warriorImages = {
-  idle: { img: warriorIdle, spriteCount: 6, frameInterval: 140 },
-  walk: { img: warriorWalk, spriteCount: 8, frameInterval: 110 },
-  run: { img: warriorRun, spriteCount: 6, frameInterval: 110 },
-  jump: { img: warriorJump, spriteCount: 5, frameInterval: 110 },
-  attack: { img: warriorAttack1, spriteCount: 4, frameInterval: 100 },
-  runAttack: { img: warriorAttackRun1, spriteCount: 4, frameInterval: 100 },
-  hurt: { img: warriorHurt, spriteCount: 2, frameInterval: 200 },
+  idle: { img: Idle, frameCount: 6, frameInterval: 140, frame: 0 },
+  walk: { img: Walk, frameCount: 8, frameInterval: 110, frame: 0 },
+  run: { img: Run, frameCount: 6, frameInterval: 110, frame: 0 },
+  attack: { img: Attack1, frameCount: 4, frameInterval: 70, frame: 0 },
+  runAttack: { img: AttackRun, frameCount: 4, frameInterval: 70, frame: 0 },
+  hurt: { img: Hurt, frameCount: 2, frameInterval: 80, frame: 0 },
+  fall: { img: Fall, frameCount: 2, frameInterval: 100, frame: 0 },
 };
 
-const warriorStats = {
-  walkSpeed: 1.2,
-  healthPoints: 100,
-  fallSpeed: 0.1,
-  fallSpeedStep: 0.1,
-  fallSpeedLimit: 5,
-
-  attackDamage: 10,
-
-  runSpeed: 2,
-
-  jumpSpeedInitial: 5,
-  jumpSpeed: 5,
-  jumpSpeedStep: 0.1,
-};
-
-const warriorState = {
-  isWalking: false,
-  isHurt: false,
-  direction: "right",
-  attackDirection: "right",
-
-  isAttacking: false,
-  isAttackingAnimation: false,
-  isAttackingRunningAnimation: false,
-
-  isAnimating: false,
-
-  isJumping: false,
-  isJumpingAnimation: false,
-  isJumpingInitial: false,
-
-  isRunning: false,
-  isFalling: false,
-};
+const warriorStats = new Stats(0.2, 1.2, 100, 0.1, 0.1, 5, 10, 2, 5, 5, 0.1, 0.2);
 
 function warriorSetState() {
-  setBaseState.call(this);
+  setState.call(this);
   setJumpState.call(this);
-  setRunState.call(this);
+  setMoveState.call(this);
   setRunAttackState.call(this);
 }
-function warriorSetEndSprite() {
-  setEndRunAttackSprite.call(this);
-  setEndJumpSprite.call(this);
-}
 
-function getWarriorSpriteName() {
+function getWarriorActiveFrameName() {
   const { state } = this;
-  if (state.isHurt) return "damage";
-
-  if (state.isAttackingRunningAnimation) return "runAttack";
-  if (state.isAttackingAnimation) return "attack";
-  if (state.isJumpingAnimation) return "jump";
-
+  if (state.isHurt) return "hurt";
+  if (state.animationLock) return state.animationLock;
+  if (state.isFalling) return "fall";
   if (state.isRunning) return "run";
   if (state.isWalking) return "walk";
-
   return "idle";
 }
 
 export const warrior = new Character({
-  spriteImages: warriorImages,
+  frameImages: warriorImages,
   stats: warriorStats,
-  state: warriorState,
-  spriteState: new SpriteState(0.2),
 
   setState: warriorSetState,
-  setSprite: setBaseSpriteCount,
-  setEndSprite: warriorSetEndSprite,
+  setFrames: setFrames,
 
-  setMovePosition,
-
-  getSpriteName: getWarriorSpriteName,
+  getActiveFrameName: getWarriorActiveFrameName,
 });
 
-loadImages(warrior.spriteImages).then(() => warrior.setImages());
+loadImages(warrior.frameImages).then(() => warrior.setImages());
