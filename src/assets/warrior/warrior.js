@@ -7,4 +7,14 @@ import AttackRun from "./Run+Attack.png";
 import Hurt from "./Hurt.png";
 import Fall from "./fall.png";
 
-export { Idle, Run, Walk, Jump, Attack1, AttackRun, Hurt, Fall };
+const warriorImages = {
+  idle: { img: Idle, frameCount: 6, frameInterval: 140, frame: 0 },
+  walk: { img: Walk, frameCount: 8, frameInterval: 110, frame: 0 },
+  run: { img: Run, frameCount: 6, frameInterval: 110, frame: 0 },
+  attack: { img: Attack1, frameCount: 4, frameInterval: 70, frame: 0 },
+  runAttack: { img: AttackRun, frameCount: 4, frameInterval: 70, frame: 0 },
+  hurt: { img: Hurt, frameCount: 2, frameInterval: 80, frame: 0 },
+  fall: { img: Fall, frameCount: 2, frameInterval: 100, frame: 0 },
+};
+
+export { warriorImages };

@@ -16,7 +16,6 @@ class Game {
     this.objects = [];
 
     this.currentTime = 0;
-
     this.player;
 
     setCanvasSizeForScreen(this.canvasEl);
@@ -34,6 +33,9 @@ class Game {
       this.camera.setTarget(character);
     }
   }
+  addObject(object) {
+    this.objects.push(object);
+  }
 
   setPlayer(player) {
     // if (this.playerController) this.playerController.removeEvents();
@@ -42,28 +44,36 @@ class Game {
     this.playerController.setEvents();
   }
 
-  setAI(character) {}
-
   animate(timeframe) {
     this.currentTime = timeframe;
     const { width, height } = this.canvasEl;
-    const ctx = this.ctx;
 
-    ctx.clearRect(0, 0, width, height);
-
+    this.ctx.clearRect(0, 0, width, height);
     this.camera.centerOn();
 
+    this.animateCharacters();
+    this.animateObjects();
+
+    requestAnimationFrame(this.animate.bind(this));
+  }
+  animateObjects() {
+    for (let i = this.objects.length - 1; i >= 0; i--) {
+      const object = this.objects[i];
+      if (object.loadedImage) {
+        object.draw();
+      }
+    }
+  }
+
+  animateCharacters() {
     for (let i = this.characters.length - 1; i >= 0; i--) {
       const char = this.characters[i];
-
       if (char.loadedImages) {
         char.setState();
         char.setFrames();
         char.setAnimation();
       }
     }
-
-    requestAnimationFrame(this.animate.bind(this));
   }
 }
 

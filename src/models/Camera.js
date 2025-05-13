@@ -12,8 +12,8 @@ export class Camera {
     this.x = Math.max(
       0,
       Math.min(
-        target.posX - game.canvasEl.width / 2, // 3400 - 450 =
-        game.worldWidth - game.canvasEl.width // 4000 - 900 = 3100
+        target.posX - game.canvasEl.width / 2,
+        game.worldWidth - game.canvasEl.width
       )
     );
     this.y = Math.max(
