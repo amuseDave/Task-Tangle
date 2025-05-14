@@ -1,27 +1,34 @@
 import moonImg from "../../assets/game_objects/moon.png";
 import nightBg from "../../assets/game_objects/nightBg.png";
-import barrel from "../../assets/game_objects/barrel.png";
+import trainingGround from "../../assets/game_objects/trainingGround.png";
+
+import taskBoard from "../../assets/game_objects/taskBoard.png";
+import info from "../../assets/game_objects/info.png";
+import toolTipE from "../../assets/game_objects/toolTipE.png";
+
 import { loadImages } from "../../utils";
 import { game } from "../Game";
-import { GameObject } from "./Object";
+import { GameObject, GameObjectInteractive } from "./Object";
 
 const { canvasEl } = game;
 
-loadImages([{ img: barrel }]).then((imgArr) => {
-  const img = imgArr[0].img;
-  const barrel = new GameObject(img, 660, 1, 1, 50, 60);
-  game.addObject(barrel);
+loadImages([{ img: taskBoard }, { img: info }, { img: toolTipE }]).then((imgArr) => {
+  const [tB, info, TTE] = imgArr.map((i) => i.img);
+  const taskBoard = new GameObjectInteractive(tB, TTE, info, 80, 0, 1, 1);
+  game.addObject(taskBoard);
+
+  // Since above objects are dependant to be z indexed bellow
+  // We set images of training ground only when above are loaded
+  loadImages([{ img: trainingGround }]).then((imgArr) => {
+    const img = imgArr[0].img;
+    const posX = canvasEl.width / 2 - img.width / 2;
+    const trainingGround = new GameObject(img, 0, 0, 1, 1);
+    game.addObject(trainingGround);
+  });
 });
 
 loadImages([{ img: moonImg }]).then((imgArr) => {
   const img = imgArr[0].img;
-  const moonObject = new GameObject(img, 200, 0.3, 0.1);
+  const moonObject = new GameObject(img, 200, 600, 0.05, 0);
   game.addObject(moonObject);
-});
-
-loadImages([{ img: nightBg }]).then((imgArr) => {
-  const img = imgArr[0].img;
-  const posX = canvasEl.width / 2 - img.width / 2;
-  const backgroundObject = new GameObject(img, posX, 0, 0);
-  game.addObject(backgroundObject);
 });

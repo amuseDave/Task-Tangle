@@ -23,9 +23,6 @@ export class Character {
     this.setState = setState;
     this.setFrames = setFrames;
     this.getActiveFrameName = getActiveFrameName;
-
-    this.posX = 444;
-    this.posY = 0;
   }
 
   setAnimation() {
@@ -39,7 +36,7 @@ export class Character {
     const imgSingleframe = imgWidth / frameCount;
 
     let imgPosX = this.posX - game.camera.x - imgSingleframe / 2;
-    const imgPosY = canvasHeight - imgHeight - this.posY;
+    const imgPosY = game.camera.y + canvasHeight - imgHeight - this.posY;
 
     const activeDirection = isAttack ? attackDirection : direction;
 

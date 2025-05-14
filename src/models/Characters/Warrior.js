@@ -28,6 +28,7 @@ function getWarriorActiveFrameName() {
 
 export const warrior = {
   frameImages: warriorImages,
+  ////////////////ES,  WS,  HP,  FS,  FSS, FSL,AD, RS,JSI, JS, JSP
   stats: new Stats(0.2, 1.2, 100, 0.1, 0.1, 5, 10, 2, 5, 5, 0.1, 0.2),
   setState: warriorSetState,
   setFrames,

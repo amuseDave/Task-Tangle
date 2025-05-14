@@ -8,40 +8,18 @@ class Game {
     this.canvasEl = document.getElementById("canvas");
     this.ctx = this.canvasEl.getContext("2d");
 
-    this.worldWidth = 4000;
-    this.worldHeight = 1000;
+    this.worldWidth = 2200;
+    this.worldHeight = 2000;
     this.camera = new Camera(this.canvasEl);
 
     this.characters = [];
     this.objects = [];
+    this.interactiveObjects = [];
 
     this.currentTime = 0;
     this.player;
 
     setCanvasSizeForScreen(this.canvasEl);
-  }
-
-  addCharacter({ character, x, y, type }) {
-    character.posX = x;
-    character.posY = y;
-    this.characters.push(character);
-
-    if (type === "enemy") {
-      new AIController();
-    } else if (type === "player") {
-      this.setPlayer(character);
-      this.camera.setTarget(character);
-    }
-  }
-  addObject(object) {
-    this.objects.push(object);
-  }
-
-  setPlayer(player) {
-    // if (this.playerController) this.playerController.removeEvents();
-    this.player = player;
-    this.playerController = new PlayerController(player);
-    this.playerController.setEvents();
   }
 
   animate(timeframe) {
@@ -51,6 +29,7 @@ class Game {
     this.ctx.clearRect(0, 0, width, height);
 
     this.camera.centerOn();
+
     this.animateObjects();
     this.animateCharacters();
 
@@ -70,6 +49,33 @@ class Game {
       char.setFrames();
       char.setAnimation();
     }
+  }
+
+  ////// Manipulate game
+  addObject(object) {
+    this.objects.push(object);
+    if (object.isInteractive) this.interactiveObjects.push(object);
+  }
+
+  addCharacter({ character, x, y, type }) {
+    character.posX = x;
+    character.posY = y;
+    this.characters.push(character);
+
+    if (type === "enemy") {
+      new AIController();
+    } else if (type === "player") {
+      this.setPlayer(character);
+      this.camera.setTarget(character);
+    }
+  }
+
+  setPlayer(player) {
+    if (!this.playerController) {
+      this.playerController = new PlayerController(player);
+      this.playerController.setEvents();
+    }
+    this.player = player;
   }
 }
 

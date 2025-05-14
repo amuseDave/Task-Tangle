@@ -1,35 +1,71 @@
 import { game } from "../Game";
 
 class GameObject {
-  constructor(img, relativeX, relativeY, dynamicX, width = null, height = null) {
+  constructor(img, posX, posY, dynamicX, dynamicY) {
     this.img = img;
-    this.relativeX = relativeX;
-    this.relativeY = relativeY;
-    this.dynamicX = dynamicX;
 
-    this.width = width;
-    this.height = height;
+    this.posX = posX;
+    this.posY = posY;
+    this.dynamicX = dynamicX;
+    this.dynamicY = dynamicY;
   }
 
   draw() {
-    console.log(this.relativeX);
-    const { width, height } = game.canvasEl;
-    const { img, relativeX, relativeY } = this;
+    const { img, posX, posY } = this;
+    const { height: canvasHeight } = game.canvasEl;
+    const { width: imgWidth, height: imgHeight } = img;
 
-    const dx = relativeX - game.camera.x * this.dynamicX;
+    const cameraX = game.camera.x * this.dynamicX;
+    const cameraY = game.camera.y * this.dynamicY;
 
-    if (this.width) {
-      game.ctx.drawImage(
-        img,
-        dx,
-        height * relativeY - img.height / 2,
-        this.width,
-        this.height
-      );
-    } else {
-      game.ctx.drawImage(img, dx, 0);
+    const dx = posX - cameraX;
+    const dy = cameraY + canvasHeight - imgHeight - posY;
+
+    game.ctx.drawImage(img, dx, dy);
+
+    if (this.isInteractive) {
+      this.setActive(img, dx, dy);
     }
   }
 }
 
-export { GameObject };
+class GameObjectInteractive extends GameObject {
+  constructor(img, activeImg, idleImg, posX, posY, dynamicX, dynamicY) {
+    super(img, posX, posY, dynamicX, dynamicY);
+
+    this.idleImg = idleImg;
+    this.activeImg = activeImg;
+    this.isActive = false;
+    this.isInteractive = true;
+  }
+
+  interact() {
+    console.log("Interacting with task-board");
+  }
+
+  setActive(img, dx, dy) {
+    // 30 can be dynamic for later
+    if (
+      game.player.posX >= this.posX - 30 &&
+      game.player.posX <= this.posX + this.img.width + 30 &&
+      game.player.posY <= this.posY + this.img.height + 30 &&
+      game.player.posY >= this.posY - 30
+    ) {
+      game.ctx.drawImage(
+        this.activeImg,
+        dx + img.width / 2 - this.activeImg.width / 2,
+        dy - this.activeImg.height
+      );
+      this.isActive = true;
+    } else {
+      this.isActive = false;
+      game.ctx.drawImage(
+        this.idleImg,
+        dx + img.width / 2 - this.idleImg.width / 2,
+        dy - this.idleImg.height - 5
+      );
+    }
+  }
+}
+
+export { GameObject, GameObjectInteractive };

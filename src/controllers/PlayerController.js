@@ -1,3 +1,5 @@
+import { game } from "../models/Game";
+
 export class PlayerController {
   constructor(character) {
     this.state = {
@@ -8,6 +10,8 @@ export class PlayerController {
       " Pressed": false,
 
       shiftPressed: false,
+
+      ePressed: false,
     };
     this.character = character;
 
@@ -34,6 +38,13 @@ export class PlayerController {
       }
     } else if (key === "shift") {
       if (this.character.state.isWalking) this.character.state.isRunning = true;
+    } else if (key === "e") {
+      for (let i = 0; i < game.interactiveObjects.length; i++) {
+        const object = game.interactiveObjects[i];
+        if (object.isActive) {
+          object.interact();
+        }
+      }
     }
   }
 
