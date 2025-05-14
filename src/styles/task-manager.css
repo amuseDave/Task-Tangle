@@ -1,0 +1,30 @@
+#task-manager-container {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  background-color: rgba(255, 254, 252, 0.314);
+  border: 1px solid black;
+  transition: transform 0.3s 0.2s ease-out;
+
+  padding: 1.2rem;
+  border-radius: 1rem;
+  transform: scale(0.1);
+  width: 30rem;
+  min-height: 42rem;
+
+  text-align: center;
+
+  background-size: cover;
+}
+
+#task-manager-container.visible {
+  pointer-events: all;
+  visibility: visible;
+  transform: scale(1);
+  opacity: 1;
+}
+
+#task-manager-container h1 {
+  color: rgb(18, 14, 9);
+  font-size: 3.6rem;
+}

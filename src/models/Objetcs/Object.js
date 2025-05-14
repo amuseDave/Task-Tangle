@@ -30,17 +30,15 @@ class GameObject {
 }
 
 class GameObjectInteractive extends GameObject {
-  constructor(img, activeImg, idleImg, posX, posY, dynamicX, dynamicY) {
+  constructor(img, activeImg, idleImg, posX, posY, dynamicX, dynamicY, interact) {
     super(img, posX, posY, dynamicX, dynamicY);
 
     this.idleImg = idleImg;
     this.activeImg = activeImg;
     this.isActive = false;
     this.isInteractive = true;
-  }
 
-  interact() {
-    console.log("Interacting with task-board");
+    this.interact = interact;
   }
 
   setActive(img, dx, dy) {
@@ -54,7 +52,7 @@ class GameObjectInteractive extends GameObject {
       game.ctx.drawImage(
         this.activeImg,
         dx + img.width / 2 - this.activeImg.width / 2,
-        dy - this.activeImg.height
+        dy - img.height / 2
       );
       this.isActive = true;
     } else {
@@ -62,7 +60,7 @@ class GameObjectInteractive extends GameObject {
       game.ctx.drawImage(
         this.idleImg,
         dx + img.width / 2 - this.idleImg.width / 2,
-        dy - this.idleImg.height - 5
+        dy - img.height / 2
       );
     }
   }

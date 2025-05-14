@@ -1,6 +1,9 @@
-:root {
-  --aspect-ratio: 1920 / 1080;
+@font-face {
+  font-family: "Medieval";
+  src: url("./Medieval.woff2") format("woff2"), url("./Medieval.woff") format("woff");
+  font-display: swap;
 }
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,11 +11,12 @@
 }
 html {
   font-size: 62.5%;
-  cursor: url("./default.png"), default;
+  cursor: none;
   background-color: rgb(0, 0, 5);
   background-image: linear-gradient(to bottom, black, rgb(0, 0, 23));
   background-repeat: no-repeat;
   background-attachment: fixed;
+  font-family: "Medieval", sans-serif;
 }
 body {
   display: grid;
@@ -20,11 +24,32 @@ body {
   overflow: hidden;
 }
 
-#canvas {
-  aspect-ratio: var(--aspect-ratio);
-  width: 100%;
+#fixed-menu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: url("./default.png"), default;
+  backdrop-filter: blur(3px);
+  background-color: rgba(56, 46, 33, 0.85);
+
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+
+  transition: opacity 0.3s ease-in;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+#fixed-menu-container.visible {
+  pointer-events: all;
+  visibility: visible;
+  opacity: 1;
+}
 /*****************************************/
 /*****************************************/
 /*****************************************/
