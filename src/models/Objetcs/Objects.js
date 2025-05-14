@@ -8,7 +8,7 @@ import toolTipE from "../../assets/game_objects/toolTipE2.png";
 import { loadImages } from "../../utils";
 import { game } from "../Game";
 import { GameObject, GameObjectInteractive } from "./Object";
-import { taskInteract } from "../../controllers/FixedMenu/Task-Manager";
+import { taskInteract } from "../../controllers/FixedMenu/TaskManager";
 
 const { canvasEl } = game;
 

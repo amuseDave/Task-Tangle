@@ -1,5 +1,11 @@
 import { game } from "../models/Game";
 
+const fixedMenuContainer = document.getElementById("fixed-menu-container");
+const fixedMenuDefault = document.getElementById("fixed-default-menu");
+const taskManagerContainer = document.getElementById("task-manager-container");
+
+fixedMenuContainer.style.display = "flex";
+
 export class PlayerController {
   constructor(character) {
     this.state = {
@@ -11,14 +17,10 @@ export class PlayerController {
 
       shiftPressed: false,
 
+      escapePressed: false,
       ePressed: false,
     };
     this.character = character;
-
-    this.handleKeyDownBound = this.handleKeyDown.bind(this);
-    this.handleKeyUpBound = this.handleKeyUp.bind(this);
-    this.handleMouseDownBound = this.handleMouseDown.bind(this);
-    this.handleMouseUpBound = this.handleMouseUp.bind(this);
   }
 
   handleKeyDown(e) {
@@ -38,7 +40,9 @@ export class PlayerController {
       }
     } else if (key === "shift") {
       if (this.character.state.isWalking) this.character.state.isRunning = true;
-    } else if (key === "e") {
+    }
+    // Interact with objects that are active
+    else if (key === "e") {
       for (let i = 0; i < game.interactiveObjects.length; i++) {
         const object = game.interactiveObjects[i];
         if (object.isActive) {
@@ -46,6 +50,30 @@ export class PlayerController {
         }
       }
     }
+    // Close menu
+    else if (key === "escape") {
+      if (fixedMenuContainer.classList.contains("visible")) {
+        this.handleClouseMenu();
+      } else {
+        this.handleOpenMenu();
+      }
+    }
+  }
+  handleClouseMenu() {
+    fixedMenuContainer.classList.remove("visible");
+    fixedMenuDefault.classList.remove("visible");
+    taskManagerContainer.classList.remove("visible");
+    game.isMenuOpen = false;
+  }
+  handleOpenMenu() {
+    fixedMenuDefault.classList.add("visible");
+    fixedMenuContainer.classList.add("visible");
+    game.isMenuOpen = true;
+  }
+  handleMenuClick(e) {
+    const closeBtn = e.target.closest(".close-btn-menu");
+    const fixedMenuContainerBG = e.target.closest(".fixed-menu");
+    if (closeBtn || !fixedMenuContainerBG) this.handleClouseMenu();
   }
 
   handleKeyUp(e) {
@@ -68,6 +96,7 @@ export class PlayerController {
   }
 
   handleMouseDown(e) {
+    if (game.isMenuOpen) return;
     if (e.button === 0 && !this.character.state.animationLock) {
       this.character.state.isAttack = true;
     } else if (e.button !== 0) {
@@ -75,17 +104,21 @@ export class PlayerController {
     }
   }
   handleMouseUp(e) {}
+
   setEvents() {
-    window.addEventListener("keydown", this.handleKeyDownBound);
-    window.addEventListener("keyup", this.handleKeyUpBound);
-    window.addEventListener("mousedown", this.handleMouseDownBound);
-    window.addEventListener("mouseup", this.handleMouseUpBound);
+    window.addEventListener("keydown", this.handleKeyDown.bind(this));
+    window.addEventListener("keyup", this.handleKeyUp.bind(this));
+    window.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    window.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
+    window.addEventListener("blur", this.handleBlur.bind(this));
+
+    fixedMenuContainer.addEventListener("click", this.handleMenuClick.bind(this));
   }
 
-  removeEvents() {
-    window.removeEventListener("keydown", this.handleKeyDownBound);
-    window.removeEventListener("keyup", this.handleKeyUpBound);
-    window.removeEventListener("mousedown", this.handleMouseDownBound);
-    window.removeEventListener("mouseup", this.handleMouseUpBound);
+  handleBlur() {
+    this.character.state.isWalking = false;
+    this.character.state.isRunning = false;
+    this.state.shiftPressed = false;
   }
 }

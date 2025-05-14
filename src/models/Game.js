@@ -23,15 +23,17 @@ class Game {
   }
 
   animate(timeframe) {
-    this.currentTime = timeframe;
+    if (!game.isMenuOpen) {
+      this.currentTime = timeframe;
 
-    const { width, height } = this.canvasEl;
-    this.ctx.clearRect(0, 0, width, height);
+      const { width, height } = this.canvasEl;
+      this.ctx.clearRect(0, 0, width, height);
 
-    this.camera.centerOn();
+      this.camera.centerOn();
 
-    this.animateObjects();
-    this.animateCharacters();
+      this.animateObjects();
+      this.animateCharacters();
+    }
 
     requestAnimationFrame(this.animate.bind(this));
   }
