@@ -29,6 +29,6 @@ loadImages([{ img: taskBoard }, { img: info }, { img: toolTipE }]).then((imgArr)
 
 loadImages([{ img: moonImg }]).then((imgArr) => {
   const img = imgArr[0].img;
-  const moonObject = new GameObject(img, 200, 600, 0.05, 0);
+  const moonObject = new GameObject(img, 600, 700, 0.05, 0);
   game.addObject(moonObject);
 });
