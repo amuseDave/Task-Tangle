@@ -28,3 +28,37 @@
 #input-cont img:hover {
   cursor: url("./click.png"), default;
 }
+
+#task-manager-container ul {
+  margin-top: 3.2rem;
+  padding: 0rem 1rem;
+}
+
+#task-manager-container ul li {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1rem;
+  justify-content: space-between;
+}
+button:hover {
+  filter: invert(90%);
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+#task-manager-container .buttons {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+#error-message {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(54, 12, 12);
+  width: max-content;
+}

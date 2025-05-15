@@ -11,9 +11,12 @@ export class PlayerController {
     this.state = {
       aPressed: false,
       dPressed: false,
+      arrowrightPressed: false,
+      arrowleftPressed: false,
 
       wPressed: false,
       " Pressed": false,
+      arrowupPressed: false,
 
       shiftPressed: false,
 
@@ -30,11 +33,14 @@ export class PlayerController {
     if (this.state[`${key}Pressed`] === undefined) return;
     this.state[`${key}Pressed`] = true;
 
-    if (key === "d" || key === "a") {
+    const left = key === "a" || key === "arrowleft";
+    const right = key === "d" || key === "arrowright";
+
+    if (left || right) {
       this.character.state.isWalking = true;
-      this.character.state.direction = key === "d" ? "right" : "left";
+      this.character.state.direction = right ? "right" : "left";
       if (this.state.shiftPressed) this.character.state.isRunning = true;
-    } else if (key === "w" || key === " ") {
+    } else if (key === "w" || key === " " || key === "arrowup") {
       if (!this.character.state.isJumping && !this.character.state.isFalling) {
         this.character.state.isJumping = true;
       }
@@ -72,8 +78,8 @@ export class PlayerController {
   }
   handleMenuClick(e) {
     const closeBtn = e.target.closest(".close-btn-menu");
-    const fixedMenuContainerBG = e.target.closest(".fixed-menu");
-    if (closeBtn || !fixedMenuContainerBG) this.handleClouseMenu();
+    // const fixedMenuContainerBG = e.target.closest(".fixed-menu");
+    if (closeBtn) this.handleClouseMenu();
   }
 
   handleKeyUp(e) {
@@ -82,10 +88,18 @@ export class PlayerController {
     if (this.state[`${key}Pressed`] === undefined) return;
     this.state[`${key}Pressed`] = false;
 
+    const left = key === "a" || key === "arrowleft";
+    const right = key === "d" || key === "arrowright";
+
     // Hande walking state with switches if other key is still down
-    if (key === "d" || key === "a") {
-      if (this.state.aPressed || this.state.dPressed) {
-        this.character.state.direction = key === "d" ? "left" : "right";
+    if (left || right) {
+      if (
+        this.state.aPressed ||
+        this.state.dPressed ||
+        this.state.arrowleftPressed ||
+        this.state.arrowrightPressed
+      ) {
+        this.character.state.direction = left ? "right" : "left";
       } else {
         this.character.state.isWalking = false;
         this.character.state.isRunning = false;

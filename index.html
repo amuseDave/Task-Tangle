@@ -7,16 +7,19 @@
   </head>
   <body>
     <div style="display: none" id="fixed-menu-container">
-      <div id="task-manager-container" class="fixed-menu">
+      <div style="position: relative" id="task-manager-container" class="fixed-menu">
         <button class="close-btn-menu">x</button>
         <h1>ToDo-Board</h1>
 
         <form id="input-cont">
-          <input id="input-task" />
+          <input maxlength="18" id="input-task" />
           <button>
             <img src="./pencil.png" />
           </button>
         </form>
+
+        <ul id="task-list"></ul>
+        <p style="display: none" id="error-message">Task Limit Reached</p>
       </div>
 
       <div id="fixed-default-menu" class="fixed-menu">
